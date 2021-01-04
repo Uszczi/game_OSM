@@ -27,6 +27,4 @@ struct JoY {
 	long Hat;
 };
 
-int checkKey(int code);
-int getKey();
 #endif
