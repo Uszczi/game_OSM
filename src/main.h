@@ -16,7 +16,6 @@
 #include <time.h>
 #include <pthread.h>
 
-
 #include "utilities.h"
 #include "peripherals.h"
 
@@ -25,18 +24,5 @@ void SystemExit();
 
 void ClearScreen();
 void PrintDiagnosticInfo();
-
-unsigned int GRAPH[640 * 480];
-
-volatile long globalTimer_ms=0;
-long startTime_ms;
-int frame_count = 0;
-pthread_t tID;
-
-char *fbname;
-int FrameBufferFD, inputEventsFD;
-struct fb_fix_screeninfo fix_info;
-struct fb_var_screeninfo var_info;
-void *framebuffer;
 
 #endif /* SRC_MAIN_H_ */
