@@ -21,8 +21,11 @@ PaintDevice::PaintDevice()
 	frameBufferFD = open("/dev/fb0", O_RDWR);
 	ioctl(frameBufferFD, FBIOGET_FSCREENINFO, &fix_info);
 
-	framebuffer = mmap(NULL, fix_info.line_length * 480, PROT_READ | PROT_WRITE,MAP_SHARED, frameBufferFD, 0);
+	framebuffer = mmap(NULL, fix_info.smem_len, PROT_READ | PROT_WRITE,MAP_SHARED, frameBufferFD, 0);
 	buffer = (unsigned int*)malloc(fix_info.smem_len);
+
+	width = fix_info.line_length/4;
+	height = fix_info.smem_len / fix_info.line_length;
 }
 
 PaintDevice::~PaintDevice()
@@ -31,25 +34,41 @@ PaintDevice::~PaintDevice()
 	free(buffer);
 }
 
-void PaintDevice::drawBitmap()
+void PaintDevice::drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y)
 {
-	FILE *bitmapFile = fopen("bitmapaRPi.ppm", "rb");
-	u_int8_t bitmap[640*480*3];
+	uint8_t *bufferBytes = (uint8_t*)buffer;
+	uint8_t *pixmapData = (uint8_t*)pixmap.getData();
 
-	fread(&bitmap, sizeof(u_int8_t), 640*480*3, bitmapFile);
-	u_int8_t *screen = (u_int8_t*)buffer;
+	const unsigned lineLength = fix_info.line_length/4;
 
-	int a = 0;
-	for(int i = 0; i < 640*480*4; i += 4)
+	for(unsigned row = 0; row < pixmap.getHeight(); ++row)
 	{
-		screen[i] = bitmap[a + 2];
-		screen[i + 1] = bitmap[a + 1];
-		screen[i + 2] = bitmap[a];
-		screen[i + 3] = 0x00;
-		a += 3;
-	}
+		for(unsigned column = 0; column < pixmap.getWidth(); ++column)
+		{
+			if(!isInBounds(x + column, y + row))
+				break;
 
-	fclose(bitmapFile);
+			const unsigned currentBufferByte = ((row + y)*lineLength + x + column)*4;
+
+			copyPixmapPixel(&bufferBytes[currentBufferByte], &pixmapData[(row*pixmap.getWidth() + column)*3]);
+		}
+	}
+}
+
+bool PaintDevice::isInBounds(unsigned x, unsigned y) const
+{
+	if(x > width || y > height)
+		return false;
+	return true;
+}
+
+
+void PaintDevice::copyPixmapPixel(uint8_t *destination, const uint8_t *pixel) const
+{
+	destination[0] = pixel[2];
+	destination[1] = pixel[1];
+	destination[2] = pixel[0];
+	destination[3] = 0x00;
 }
 
 void PaintDevice::clear()
@@ -61,3 +80,4 @@ void PaintDevice::swapBuffers()
 {
 	memcpy(framebuffer, buffer, fix_info.smem_len);
 }
+
