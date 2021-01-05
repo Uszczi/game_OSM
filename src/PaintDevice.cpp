@@ -28,6 +28,7 @@ PaintDevice::PaintDevice()
 PaintDevice::~PaintDevice()
 {
 	close(frameBufferFD);
+	free(buffer);
 }
 
 void PaintDevice::drawBitmap()
