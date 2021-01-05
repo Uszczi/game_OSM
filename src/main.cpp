@@ -22,7 +22,7 @@ int main(int argc, char *argv[]) {
 			printf("Pressed %d\n", key);
 		}
 
-		paintDevice.drawBitmap();
+		paintDevice.drawPixmap("bitmapaRPi.ppm",100, 100);
 		paintDevice.swapBuffers();
 		paintDevice.clear();
 
