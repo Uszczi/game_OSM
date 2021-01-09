@@ -4,6 +4,7 @@
 
 #include "PaintDevice.h"
 #include "InputDevice.h"
+#include "PPMPixmap.h"
 
 volatile long globalTimer_ms = 0;
 long startTime_ms;
@@ -14,6 +15,12 @@ int main(int argc, char *argv[]) {
 	InputDevice input;
 	SystemInit();
 
+	PPMPixmap a = PPMPixmap("static/maze.ppm");
+	PPMPixmap p1 = PPMPixmap("static/pacman_right.ppm");
+	PPMPixmap p2 = PPMPixmap("static/pacman_left.ppm");
+	PPMPixmap p3 = PPMPixmap("static/pacman_down.ppm");
+	PPMPixmap p4 = PPMPixmap("static/pacman_up.ppm");
+
 	while (1)
 	{
 		int key = input.getKey();
@@ -22,7 +29,11 @@ int main(int argc, char *argv[]) {
 			printf("Pressed %d\n", key);
 		}
 
-		paintDevice.drawPixmap("bitmapaRPi.ppm",100, 100);
+		paintDevice.drawPixmap(a, 0, 0);
+		paintDevice.drawPixmap(p1, 319, 261);
+		paintDevice.drawPixmap(p2, 219, 261);
+		paintDevice.drawPixmap(p3, 119, 261);
+		paintDevice.drawPixmap(p4, 19, 261);
 		paintDevice.swapBuffers();
 		paintDevice.clear();
 
