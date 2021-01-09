@@ -5,6 +5,7 @@
 #include "PaintDevice.h"
 #include "InputDevice.h"
 #include "PPMPixmap.h"
+#include "Pacman.h"
 
 volatile long globalTimer_ms = 0;
 long startTime_ms;
@@ -17,10 +18,21 @@ int main(int argc, char *argv[]) {
 
 	PPMPixmap a = PPMPixmap("static/maze.ppm");
 	PPMPixmap p1 = PPMPixmap("static/pacman_right.ppm");
-	PPMPixmap p2 = PPMPixmap("static/pacman_left.ppm");
-	PPMPixmap p3 = PPMPixmap("static/pacman_down.ppm");
-	PPMPixmap p4 = PPMPixmap("static/pacman_up.ppm");
-	PPMPixmap clyde = PPMPixmap("static/clyde.ppm");
+	Pacman pacman = Pacman();
+
+
+	Node * n1 = new Node(311, 262);
+	Node * n2 = new Node(241, 262);
+	Node * n3 = new Node(381, 262);
+
+	n1->add(n2);
+	n2->add(n1);
+
+//	n1.add(n3);
+//	n3.add(n1);
+
+
+	pacman.now = n1;
 
 	while (1)
 	{
@@ -30,16 +42,15 @@ int main(int argc, char *argv[]) {
 			printf("Pressed %d\n", key);
 		}
 
+		pacman.setDirection(key);
+		pacman.update();
+
 		paintDevice.drawPixmap(a, 0, 0);
-		paintDevice.drawPixmap(p1, 319, 261);
-		paintDevice.drawPixmap(p2, 219, 261);
-		paintDevice.drawPixmap(p3, 119, 261);
-		paintDevice.drawPixmap(p4, 19, 261);
-		paintDevice.drawPixmap(clyde, 300, 200);
+		paintDevice.drawPixmap(p1, pacman.x, pacman.y);
 		paintDevice.swapBuffers();
 		paintDevice.clear();
-
-		usleep(10000);
+		usleep(1000);
+		printf("x = %i y = %i\n",pacman.x, pacman.y);
 	}
 }
 
