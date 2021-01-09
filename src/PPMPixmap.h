@@ -16,7 +16,7 @@ class PPMPixmap {
 	unsigned width, height;
 
 public:
-	PPMPixmap(const char *filename);
+	PPMPixmap(const std::string &filename);
 	PPMPixmap(const PPMPixmap &other);
 	PPMPixmap(PPMPixmap &&other);
 
@@ -24,6 +24,10 @@ public:
 
 	const uint8_t *getData() const {
 		return data;
+	}
+
+	const uint8_t *pixelAt(unsigned x, unsigned y) const {
+		return &data[(x + (y*width))*3];
 	}
 
 	unsigned getWidth() const {

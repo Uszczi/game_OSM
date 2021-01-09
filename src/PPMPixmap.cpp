@@ -12,7 +12,7 @@
 #include <string>
 #include <sstream>
 
-PPMPixmap::PPMPixmap(const char *filename) :
+PPMPixmap::PPMPixmap(const std::string &filename) :
 	data(nullptr),
 	width(640),
 	height(480)
