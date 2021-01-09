@@ -20,6 +20,7 @@ int main(int argc, char *argv[]) {
 	PPMPixmap p2 = PPMPixmap("static/pacman_left.ppm");
 	PPMPixmap p3 = PPMPixmap("static/pacman_down.ppm");
 	PPMPixmap p4 = PPMPixmap("static/pacman_up.ppm");
+	PPMPixmap clyde = PPMPixmap("static/clyde.ppm");
 
 	while (1)
 	{
@@ -34,6 +35,7 @@ int main(int argc, char *argv[]) {
 		paintDevice.drawPixmap(p2, 219, 261);
 		paintDevice.drawPixmap(p3, 119, 261);
 		paintDevice.drawPixmap(p4, 19, 261);
+		paintDevice.drawPixmap(clyde, 300, 200);
 		paintDevice.swapBuffers();
 		paintDevice.clear();
 
