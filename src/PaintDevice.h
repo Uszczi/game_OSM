@@ -27,6 +27,14 @@ public:
 	PaintDevice(const std::string &fontFile);
 	virtual ~PaintDevice();
 
+	unsigned getWidth() const {
+		return width;
+	}
+
+	unsigned getHeight() const {
+		return height;
+	}
+
 	void drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y);
 	void drawText(const std::string &text, unsigned x, unsigned y);
 
