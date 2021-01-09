@@ -17,6 +17,9 @@ class PPMPixmap {
 
 public:
 	PPMPixmap(const char *filename);
+	PPMPixmap(const PPMPixmap &other);
+	PPMPixmap(PPMPixmap &&other);
+
 	virtual ~PPMPixmap();
 
 	const uint8_t *getData() const {
@@ -30,6 +33,9 @@ public:
 	unsigned getHeight() const {
 		return height;
 	}
+
+	PPMPixmap& operator=(const PPMPixmap &other);
+	PPMPixmap& operator=(PPMPixmap &&other);
 
 private:
 	bool hasHeader(std::ifstream &file) const;
