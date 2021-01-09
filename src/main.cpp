@@ -6,14 +6,19 @@
 #include "InputDevice.h"
 #include "PPMPixmap.h"
 
+#include "GameStatus.h"
+
 volatile long globalTimer_ms = 0;
 long startTime_ms;
 pthread_t tID;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
+	SystemInit();
+
 	PaintDevice paintDevice("static/font.ppm");
 	InputDevice input;
-	SystemInit();
+	GameStatus gameStatus;
 
 	PPMPixmap a = PPMPixmap("static/maze.ppm");
 	PPMPixmap p1 = PPMPixmap("static/pacman_right.ppm");
@@ -37,7 +42,7 @@ int main(int argc, char *argv[]) {
 		paintDevice.drawPixmap(p4, 19, 261);
 		paintDevice.drawPixmap(clyde, 300, 200);
 
-		paintDevice.drawText("Elo to jest test!\nTo chyba ma szanse dzialac\n12 + 6 = 18 :0", 0, 0);
+		paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
