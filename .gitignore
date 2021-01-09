@@ -40,7 +40,6 @@ SIMOUT/*
 *.ld
 *.prefs
 *.html
-*.png
 *.csv
 
 
