@@ -7,10 +7,12 @@
 
 #include "PPMPixmap.h"
 
+#include <cstring>
+
 #include <string>
 #include <sstream>
 
-PPMPixmap::PPMPixmap(const char *filename) :
+PPMPixmap::PPMPixmap(const std::string &filename) :
 	data(nullptr),
 	width(640),
 	height(480)
@@ -51,10 +53,50 @@ bool PPMPixmap::hasHeader(std::ifstream &file) const
 	return false;
 }
 
+PPMPixmap::PPMPixmap(const PPMPixmap &other) :
+	width(other.width),
+	height(other.height)
+{
+	const size_t dataSize = width*height*3;
+	data = new uint8_t[dataSize];
+	memcpy(data, other.data, dataSize);
+}
+
+PPMPixmap::PPMPixmap(PPMPixmap &&other) :
+	width(other.width),
+	height(other.height)
+{
+	data = other.data;
+	other.data = nullptr;
+}
+
 PPMPixmap::~PPMPixmap()
 {
 	delete[] data;
 }
 
+PPMPixmap& PPMPixmap::operator=(const PPMPixmap &other)
+{
+	delete[] data;
+	width = other.width;
+	height = other.height;
 
+	const size_t dataSize = width*height*3;
+	data = new uint8_t[dataSize];
+	memcpy(data, other.data, dataSize);
+
+	return *this;
+}
+
+PPMPixmap& PPMPixmap::operator=(PPMPixmap &&other)
+{
+	delete[] data;
+	width = other.width;
+	height = other.height;
+
+	data = other.data;
+	other.data = nullptr;
+
+	return *this;
+}
 
