@@ -11,7 +11,7 @@ long startTime_ms;
 pthread_t tID;
 
 int main(int argc, char *argv[]) {
-	PaintDevice paintDevice;
+	PaintDevice paintDevice("static/font.ppm");
 	InputDevice input;
 	SystemInit();
 
@@ -36,6 +36,9 @@ int main(int argc, char *argv[]) {
 		paintDevice.drawPixmap(p3, 119, 261);
 		paintDevice.drawPixmap(p4, 19, 261);
 		paintDevice.drawPixmap(clyde, 300, 200);
+
+		paintDevice.drawText("Elo to jest test!\nTo chyba ma szanse dzialac\n12 + 6 = 18 :0", 0, 0);
+
 		paintDevice.swapBuffers();
 		paintDevice.clear();
 
