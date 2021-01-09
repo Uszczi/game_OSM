@@ -16,7 +16,11 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
-PaintDevice::PaintDevice()
+constexpr unsigned CHAR_SIZE_X = 10;
+constexpr unsigned CHAR_SIZE_Y = 22;
+
+PaintDevice::PaintDevice(const std::string &fontFile) :
+	fontPixmap(fontFile)
 {
 	frameBufferFD = open("/dev/fb0", O_RDWR);
 	ioctl(frameBufferFD, FBIOGET_FSCREENINFO, &fix_info);
@@ -36,11 +40,6 @@ PaintDevice::~PaintDevice()
 
 void PaintDevice::drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y)
 {
-	uint8_t *bufferBytes = (uint8_t*)buffer;
-	uint8_t *pixmapData = (uint8_t*)pixmap.getData();
-
-	const unsigned lineLength = fix_info.line_length/4;
-
 	for(unsigned row = 0; row < pixmap.getHeight(); ++row)
 	{
 		for(unsigned column = 0; column < pixmap.getWidth(); ++column)
@@ -48,11 +47,60 @@ void PaintDevice::drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y)
 			if(!isInBounds(x + column, y + row))
 				break;
 
-			const unsigned currentBufferByte = ((row + y)*lineLength + x + column)*4;
-
-			copyPixmapPixel(&bufferBytes[currentBufferByte], &pixmapData[(row*pixmap.getWidth() + column)*3]);
+			copyPixmapPixel(pixelAt(x + column, y + row), pixmap.pixelAt(column, row));
 		}
 	}
+}
+
+void PaintDevice::drawText(const std::string &text, unsigned x, unsigned y)
+{
+	if(!isInBounds(x, y))
+		return;
+
+	unsigned dx = 0, dy = 0;
+
+	for(unsigned i = 0; i < text.size(); ++i)
+	{
+		char chr = text[i];
+		if(chr == '\n')
+		{
+			dx = 0;
+			dy += CHAR_SIZE_Y;
+		}
+		else
+		{
+			drawChar(chr, x + dx, y + dy);
+			dx += CHAR_SIZE_X;
+		}
+	}
+}
+
+void PaintDevice::drawChar(char chr, unsigned x, unsigned y)
+{
+	if(chr < '!' || chr > '}')
+		return;
+
+	chr -= '!';
+
+	int fx0 = (chr*CHAR_SIZE_X) % fontPixmap.getWidth();
+	int fy0 = (chr*CHAR_SIZE_X) / fontPixmap.getWidth() * CHAR_SIZE_Y;
+
+	for (unsigned dy = 0; dy < CHAR_SIZE_Y; dy++)
+	{
+		for (unsigned dx = 0; dx < CHAR_SIZE_X; dx++)
+		{
+			if(!isInBounds(x + dx, y + dy))
+				break;
+
+			copyPixmapPixel(pixelAt(x+dx, y+dy), fontPixmap.pixelAt(dx + fx0, dy + fy0));
+		}
+	}
+}
+
+uint8_t* PaintDevice::pixelAt(unsigned x, unsigned y) const
+{
+	uint8_t *bufferBytes = (uint8_t*)buffer;
+	return &bufferBytes[(x+(y*width))*4];
 }
 
 bool PaintDevice::isInBounds(unsigned x, unsigned y) const
@@ -61,7 +109,6 @@ bool PaintDevice::isInBounds(unsigned x, unsigned y) const
 		return false;
 	return true;
 }
-
 
 void PaintDevice::copyPixmapPixel(uint8_t *destination, const uint8_t *pixel) const
 {
