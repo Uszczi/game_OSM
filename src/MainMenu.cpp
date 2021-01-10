@@ -20,7 +20,8 @@ constexpr unsigned X_TEXT_OFFSET = 20;
 constexpr unsigned COLOR_BACKGROUND = 0x181818;
 constexpr unsigned COLOR_HIGHTLIGHT = 0x696969;
 
-MainMenu::MainMenu() :
+MainMenu::MainMenu(const HighScore &highscores) :
+	highScores(highscores),
 	currentAction(MenuAction::Play)
 {
 
@@ -60,15 +61,28 @@ void MainMenu::drawMainMenu(PaintDevice &outputDevice) const
 void MainMenu::drawHighScores(PaintDevice &outputDevice) const
 {
 	const unsigned x0 = (outputDevice.getWidth() - MENU_WIDTH)/2;
-	const unsigned y0 = MENU_HEIGHT;
+	const unsigned y0 = (outputDevice.getHeight() - MENU_HEIGHT)/2;
 
-	// Highlight selection
+	outputDevice.drawText("Score", x0 + X_TEXT_OFFSET, y0 + Y_TEXT_OFFSET);
+	outputDevice.drawText("Date", x0 + 8*X_TEXT_OFFSET, y0 + Y_TEXT_OFFSET);
+
+	unsigned offset = 2;
+	for(const auto &score: highScores.readScores())
+	{
+		char timeString[12];
+		std::strftime(timeString, sizeof(timeString), "%d-%m-%Y", std::localtime(&score.datetime));
+
+		outputDevice.drawText(std::to_string(score.points), x0 + X_TEXT_OFFSET, y0 + offset*Y_TEXT_OFFSET);
+		outputDevice.drawText(timeString, x0 + 8*X_TEXT_OFFSET, y0 + offset*Y_TEXT_OFFSET);
+		++offset;
+	}
+
 	outputDevice.drawRect(x0 + X_TEXT_OFFSET,
-			y0,
+			MENU_HEIGHT,
 			MENU_WIDTH - 2*X_TEXT_OFFSET,
 			CHAR_SIZE_Y, COLOR_HIGHTLIGHT);
 
-	outputDevice.drawText("Return", x0 + X_TEXT_OFFSET, y0);
+	outputDevice.drawText("Return", x0 + X_TEXT_OFFSET, MENU_HEIGHT);
 }
 
 

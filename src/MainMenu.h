@@ -9,6 +9,8 @@
 #define MAINMENU_H_
 
 #include "PaintDevice.h"
+#include "HighScore.h"
+
 #include <functional>
 
 enum class MenuAction
@@ -20,6 +22,8 @@ enum class MenuAction
 
 class MainMenu {
 private:
+	const HighScore &highScores;
+
 	std::function<void()> playCallback;
 	std::function<void()> exitCallback;
 
@@ -27,7 +31,7 @@ private:
 	bool isWatchingHighScores = false;
 
 public:
-	MainMenu();
+	MainMenu(const HighScore &highscores);
 
 	void setPlayCallback(const std::function<void()> &newCallback) {
 		playCallback = newCallback;
