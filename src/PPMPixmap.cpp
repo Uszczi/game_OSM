@@ -75,6 +75,14 @@ PPMPixmap::~PPMPixmap()
 	delete[] data;
 }
 
+unsigned PPMPixmap::colorAt(unsigned x, unsigned y) const {
+	const uint8_t *pixel = pixelAt(x, y);
+
+	return (unsigned)(pixel[0]) |
+			((unsigned)(pixel[1]) << 8) |
+			((unsigned)(pixel[2]) << 16);
+}
+
 PPMPixmap& PPMPixmap::operator=(const PPMPixmap &other)
 {
 	delete[] data;

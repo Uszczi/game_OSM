@@ -30,6 +30,8 @@ public:
 		return &data[(x + (y*width))*3];
 	}
 
+	unsigned colorAt(unsigned x, unsigned y) const;
+
 	unsigned getWidth() const {
 		return width;
 	}
