@@ -37,6 +37,9 @@ public:
 
 	void drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y);
 	void drawText(const std::string &text, unsigned x, unsigned y);
+	void drawRect(unsigned x, unsigned y, unsigned width, unsigned height, unsigned color);
+
+	void setPixel(unsigned x, unsigned y, unsigned color);
 
 	void clear();
 	void swapBuffers();
