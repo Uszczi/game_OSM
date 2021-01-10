@@ -13,6 +13,9 @@
 #include <linux/fb.h>
 #include <string>
 
+constexpr unsigned CHAR_SIZE_X = 10;
+constexpr unsigned CHAR_SIZE_Y = 22;
+
 class PaintDevice {
 private:
 	void *framebuffer;
@@ -37,6 +40,9 @@ public:
 
 	void drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y);
 	void drawText(const std::string &text, unsigned x, unsigned y);
+	void drawRect(unsigned x, unsigned y, unsigned width, unsigned height, unsigned color);
+
+	void setPixel(unsigned x, unsigned y, unsigned color);
 
 	void clear();
 	void swapBuffers();

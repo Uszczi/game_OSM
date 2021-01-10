@@ -16,11 +16,21 @@ class GameStatus
 	int points = 0;
 	int level = 1;
 
+	bool isPlaying = false;
+
 public:
 	GameStatus(int playerLife = 3);
 
 	bool saveToFile(const std::string &filename) const;
 	bool restoreFromFile(const std::string &filename);
+
+	bool getPlayingStatus() {
+		return isPlaying;
+	}
+
+	void setPlaying(bool playingStatus) {
+		isPlaying = playingStatus;
+	}
 
 	int getPoints() const {
 		return points;

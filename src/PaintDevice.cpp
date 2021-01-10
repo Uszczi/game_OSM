@@ -16,9 +16,6 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
-constexpr unsigned CHAR_SIZE_X = 10;
-constexpr unsigned CHAR_SIZE_Y = 22;
-
 PaintDevice::PaintDevice(const std::string &fontFile) :
 	fontPixmap(fontFile)
 {
@@ -48,6 +45,21 @@ void PaintDevice::drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y)
 				break;
 
 			copyPixmapPixel(pixelAt(x + column, y + row), pixmap.pixelAt(column, row));
+		}
+	}
+}
+
+void PaintDevice::drawRect(unsigned x, unsigned y,
+							unsigned width, unsigned height, unsigned color)
+{
+	for(unsigned dx = 0; dx < width; ++dx)
+	{
+		for(unsigned dy = 0; dy < height; ++dy)
+		{
+			if(!isInBounds(x + dx, y + dy))
+				break;
+
+			setPixel(x + dx, y + dy, color);
 		}
 	}
 }
@@ -92,7 +104,10 @@ void PaintDevice::drawChar(char chr, unsigned x, unsigned y)
 			if(!isInBounds(x + dx, y + dy))
 				break;
 
-			copyPixmapPixel(pixelAt(x+dx, y+dy), fontPixmap.pixelAt(dx + fx0, dy + fy0));
+			unsigned color = fontPixmap.colorAt(dx + fx0, dy + fy0);
+
+			if(color != 0x00)
+				setPixel(x + dx, y + dy, color);
 		}
 	}
 }
@@ -100,12 +115,12 @@ void PaintDevice::drawChar(char chr, unsigned x, unsigned y)
 uint8_t* PaintDevice::pixelAt(unsigned x, unsigned y) const
 {
 	uint8_t *bufferBytes = (uint8_t*)buffer;
-	return &bufferBytes[(x+(y*width))*4];
+	return &bufferBytes[(x + (y*width))*4];
 }
 
 bool PaintDevice::isInBounds(unsigned x, unsigned y) const
 {
-	if(x > width || y > height)
+	if(x >= width || y >= height)
 		return false;
 	return true;
 }
@@ -118,6 +133,15 @@ void PaintDevice::copyPixmapPixel(uint8_t *destination, const uint8_t *pixel) co
 	destination[3] = 0x00;
 }
 
+void PaintDevice::setPixel(unsigned x, unsigned y, unsigned color)
+{
+	uint8_t *pixel = pixelAt(x, y);
+	pixel[0] = ((uint8_t*)&color)[0];
+	pixel[1] = ((uint8_t*)&color)[1];
+	pixel[2] = ((uint8_t*)&color)[2];
+	pixel[3] = 0x00;
+}
+
 void PaintDevice::clear()
 {
 	memset(buffer, 0, fix_info.smem_len);
@@ -127,4 +151,7 @@ void PaintDevice::swapBuffers()
 {
 	memcpy(framebuffer, buffer, fix_info.smem_len);
 }
+
+
+
 
