@@ -16,9 +16,6 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 
-constexpr unsigned CHAR_SIZE_X = 10;
-constexpr unsigned CHAR_SIZE_Y = 22;
-
 PaintDevice::PaintDevice(const std::string &fontFile) :
 	fontPixmap(fontFile)
 {
@@ -107,8 +104,10 @@ void PaintDevice::drawChar(char chr, unsigned x, unsigned y)
 			if(!isInBounds(x + dx, y + dy))
 				break;
 
-			copyPixmapPixel(pixelAt(x + dx, y + dy),
-							fontPixmap.pixelAt(dx + fx0, dy + fy0));
+			unsigned color = fontPixmap.colorAt(dx + fx0, dy + fy0);
+
+			if(color != 0x00)
+				setPixel(x + dx, y + dy, color);
 		}
 	}
 }

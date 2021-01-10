@@ -13,6 +13,9 @@
 #include <linux/fb.h>
 #include <string>
 
+constexpr unsigned CHAR_SIZE_X = 10;
+constexpr unsigned CHAR_SIZE_Y = 22;
+
 class PaintDevice {
 private:
 	void *framebuffer;
