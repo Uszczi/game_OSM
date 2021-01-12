@@ -21,6 +21,8 @@ Pacman::Pacman()
 	next_direction = 0;
 	dx = 0;
 	dy = 0;
+	next_dx = 0;
+	next_dy = 0;
 	now = 0;
 }
 
@@ -33,6 +35,12 @@ void Pacman::draw()
 void Pacman::update()
 {
 	now = now->change_now(x, y);
+
+	if (now->check_move(next_dx, next_dy, x, y))
+	{
+		dx = next_dx;
+		dy = next_dy;
+	}
 
 
 	if (now->check_move(dx, dy, x, y))
@@ -47,34 +55,22 @@ void Pacman::setDirection(int key)
 	switch(key)
 	{
 	case 106:
-		if (now->check_move(1, 0, x, y))
-		{
-			dx = 1;
-			dy = 0;
-		}
+			next_dx = 1;
+			next_dy = 0;
 		break;
 
 	case 105:
-		if (now->check_move(-1, 0, x, y))
-		{
-			dx = -1;
-			dy = 0;
-		}
+			next_dx = -1;
+			next_dy = 0;
 		break;
 	case 103:
-		if (now->check_move(0, -1, x, y))
-		{
-			dx = 0;
-			dy = -1;
-		}
+			next_dx = 0;
+			next_dy = -1;
 		break;
 
 	case 108:
-		if (now->check_move(0, 1, x, y))
-		{
-			dx = 0;
-			dy = 1;
-		}
+			next_dx = 0;
+			next_dy = 1;
 		break;
 	}
 }
