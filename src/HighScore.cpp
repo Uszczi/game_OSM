@@ -55,7 +55,7 @@ void HighScore::save() const
 void HighScore::addEntry(int points)
 {
 	if(highScores.size() >= MAX_SAVED_SCORES)
-		highScores.pop_front();
+		highScores.pop_back();
 
 	HighScoreEntry entry;
 	entry.points = points;
