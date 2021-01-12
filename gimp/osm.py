@@ -1,6 +1,7 @@
 rows_possition = [22, 84, 132, 170, 220, 270, 316, 362, 412, 458]
 cols_possition = [124, 158, 204, 250, 296]
 cols_mirror_possition = [640 - i for i in cols_possition]
+
 nodes = []
 nodes.append([0, 2, 4])
 nodes.append([0, 2, 3, 4])
@@ -43,6 +44,8 @@ for number, row in enumerate(nodes):
         print(f"Node * n{i} = new Node({cols_possition[r]}, {rows_possition[number]});")
         i += 1
 
+
+print("\n\n")
 for number, row in enumerate(nodes):
     for r in row:
         print(
@@ -78,6 +81,47 @@ for n, row in enumerate(nodes):
     if len(row) == 1:
         index += 1
         continue
+    for cell_index, cell in enumerate(row):
+        if cell_index + 1 == len(row):
+            index += 1
+            break
+        connect = row_connections[n][cell_index]
+        if connect != 0:
+            print(f"n{index}->add(n{index + 1});")
+        index += 1
+
+print("\n\n")
+index = 0
+for n, col in enumerate(nodes):
+    if len(nodes) - n == 1:
+        break
+
+    for cell_index, cell in enumerate(col):
+        connect = col_connection[n][cell_index]
+        if connect == 1:
+            con_index = index + len(col) - cell_index
+            found = False
+            for local_n in nodes[n + 1]:
+                if local_n != cell:
+                    con_index += 1
+                if local_n == cell:
+                    found = True
+                    break
+            if not found:
+                for local_n in nodes[n + 2]:
+                    if local_n != cell:
+                        con_index += 1
+                    else:
+                        break
+            print(f"n{index}->add(n{con_index});")
+        index += 1
+
+print("\n\n")
+index = 32
+for n, row in enumerate(nodes):
+    if len(row) == 1:
+        index += 1
+        continue
 
     for cell_index, cell in enumerate(row):
         if cell_index + 1 == len(row):
@@ -90,22 +134,15 @@ for n, row in enumerate(nodes):
 
         index += 1
 
-print("\n\n\n")
-index = 0
+print("\n\n")
+index = 32
 for n, col in enumerate(nodes):
     if len(nodes) - n == 1:
         break
-
     for cell_index, cell in enumerate(col):
         connect = col_connection[n][cell_index]
-
-        if index == 13:
-            breakpoint
-
-
         if connect == 1:
             con_index = index + len(col) - cell_index
-
             found = False
             for local_n in nodes[n + 1]:
                 if local_n != cell:
@@ -121,5 +158,4 @@ for n, col in enumerate(nodes):
                         break
 
             print(f"n{index}->add(n{con_index});")
-
         index += 1

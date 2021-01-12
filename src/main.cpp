@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
 	Node * n29 = new Node(296, 412);
 	Node * n30 = new Node(124, 458);
 	Node * n31 = new Node(296, 458);
+
 	Node * n32 = new Node(516, 22);
 	Node * n33 = new Node(436, 22);
 	Node * n34 = new Node(344, 22);
@@ -149,11 +150,55 @@ int main(int argc, char *argv[])
 	n25->add(n30);
 	n29->add(n31);
 
+	n32->add(n33);
+	n33->add(n34);
+	n35->add(n36);
+	n36->add(n37);
+	n37->add(n38);
+	n39->add(n40);
+	n41->add(n42);
+	n43->add(n44);
+	n45->add(n46);
+	n48->add(n49);
+	n49->add(n50);
+	n50->add(n51);
+	n52->add(n53);
+	n54->add(n55);
+	n55->add(n56);
+	n57->add(n58);
+	n58->add(n59);
+	n60->add(n61);
+	n62->add(n63);
 
+	n32->add(n35);
+	n33->add(n36);
+	n34->add(n38);
+	n35->add(n39);
+	n36->add(n40);
+	n37->add(n41);
+	n40->add(n45);
+	n42->add(n44);
+	n43->add(n46);
+	n45->add(n49);
+	n46->add(n47);
+	n47->add(n50);
+	n48->add(n52);
+	n49->add(n54);
+	n51->add(n56);
+	n53->add(n58);
+	n54->add(n59);
+	n55->add(n60);
+	n57->add(n62);
+	n61->add(n63);
 
 	start->add(n15);
 	start->add(n47);
 
+
+	n6->add(n38);
+	n12->add(n44);
+	n24->add(n56);
+	n31->add(n63);
 
 	pacman.now = start;
 
@@ -162,6 +207,8 @@ int main(int argc, char *argv[])
 	{
 		auto start = std::chrono::steady_clock::now();
 		int key = input.getKey();
+
+
 
 		if(key)
 		{
