@@ -10,6 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream>
+
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
@@ -39,13 +41,10 @@ void PaintDevice::drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y)
 {
 	for(unsigned row = 0; row < pixmap.getHeight(); ++row)
 	{
-		for(unsigned column = 0; column < pixmap.getWidth(); ++column)
-		{
-			if(!isInBounds(x + column, y + row))
-				break;
+		if(!isInBounds(x, y + row))
+			break;
 
-			copyPixmapPixel(pixelAt(x + column, y + row), pixmap.pixelAt(column, row));
-		}
+		memcpy(pixelAt(x, y + row), pixmap.pixelAt(0, row), pixmap.getWidth()*4);
 	}
 }
 
@@ -123,14 +122,6 @@ bool PaintDevice::isInBounds(unsigned x, unsigned y) const
 	if(x >= width || y >= height)
 		return false;
 	return true;
-}
-
-void PaintDevice::copyPixmapPixel(uint8_t *destination, const uint8_t *pixel) const
-{
-	destination[0] = pixel[2];
-	destination[1] = pixel[1];
-	destination[2] = pixel[0];
-	destination[3] = 0x00;
 }
 
 void PaintDevice::setPixel(unsigned x, unsigned y, unsigned color)

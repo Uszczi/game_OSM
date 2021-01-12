@@ -38,9 +38,14 @@ PPMPixmap::PPMPixmap(const std::string &filename) :
 		ppmFile.seekg(0);
 	}
 
-	data = new uint8_t[width*height*3];			// Read image data
-	ppmFile.read((char*)data, width*height*3);
+	data = new uint8_t[width*height*4];
+	uint8_t *raw = new uint8_t[width*height*3];
+
+	ppmFile.read((char*)raw, width*height*3);
 	ppmFile.close();
+
+	convertAndStore(raw);
+	delete[] raw;
 }
 
 bool PPMPixmap::hasHeader(std::ifstream &file) const
@@ -51,6 +56,24 @@ bool PPMPixmap::hasHeader(std::ifstream &file) const
 	if(header == "P6")
 		return true;
 	return false;
+}
+
+void PPMPixmap::convertAndStore(uint8_t *raw)
+{
+	unsigned a, b;
+	a = b = 0;
+
+	while(a < width*height*4)
+	{
+		data[a] = raw[b + 2];
+		data[a + 1] = raw[b + 1];
+		data[a + 2] = raw[b];
+		data[a + 3] = 0x00;
+
+		a += 4;
+		b += 3;
+	}
+
 }
 
 PPMPixmap::PPMPixmap(const PPMPixmap &other) :

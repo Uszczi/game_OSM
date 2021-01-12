@@ -51,7 +51,6 @@ private:
 	void drawChar(char chr, unsigned x, unsigned y);
 	uint8_t *pixelAt(unsigned x, unsigned y) const;
 
-	void copyPixmapPixel(uint8_t *destination, const uint8_t *pixel) const;
 	bool isInBounds(unsigned x, unsigned y) const;
 };
 
