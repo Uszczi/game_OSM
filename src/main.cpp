@@ -41,11 +41,7 @@ int main(int argc, char *argv[])
 	PPMPixmap p_bot = PPMPixmap("static/pacman_down.ppm");
 	Pacman pacman = Pacman();
 
-
-
-	Node * start = new Node(320, 270); // Center
-
-
+	Node * start = new Node(320, 270);
 
 	Node * n0 = new Node(124, 22);
 	Node * n1 = new Node(204, 22);
@@ -111,6 +107,7 @@ int main(int argc, char *argv[])
 	Node * n61 = new Node(344, 412);
 	Node * n62 = new Node(516, 458);
 	Node * n63 = new Node(344, 458);
+
 	n0->add(n1);
 	n1->add(n2);
 	n3->add(n4);
@@ -131,9 +128,6 @@ int main(int argc, char *argv[])
 	n28->add(n29);
 	n30->add(n31);
 
-
-
-
 	n0->add(n3);
 	n1->add(n4);
 	n2->add(n6);
@@ -143,7 +137,7 @@ int main(int argc, char *argv[])
 	n8->add(n13);
 	n10->add(n12);
 	n11->add(n14);
-	n13->add(n16);
+	n13->add(n17);
 	n14->add(n15);
 	n15->add(n18);
 	n16->add(n20);
@@ -157,7 +151,9 @@ int main(int argc, char *argv[])
 
 
 
-	n15->add(start);
+	start->add(n15);
+	start->add(n47);
+
 
 	pacman.now = start;
 

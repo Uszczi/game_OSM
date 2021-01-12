@@ -99,21 +99,26 @@ for n, col in enumerate(nodes):
     for cell_index, cell in enumerate(col):
         connect = col_connection[n][cell_index]
 
+        if index == 13:
+            breakpoint
+
+
         if connect == 1:
             con_index = index + len(col) - cell_index
+
+            found = False
             for local_n in nodes[n + 1]:
                 if local_n != cell:
                     con_index += 1
-                elif local_n == cell:
+                if local_n == cell:
+                    found = True
                     break
-                else:
-                    for local_n in nodes[n + 2]:
-                        print("TUTAJ TEZ jestem,")
-                        if local_n != cell:
-                            con_index += 1
-                        else:
-                            break
-                    break
+            if not found:
+                for local_n in nodes[n + 2]:
+                    if local_n != cell:
+                        con_index += 1
+                    else:
+                        break
 
             print(f"n{index}->add(n{con_index});")
 
