@@ -14,23 +14,24 @@ pthread_t tID;
 int main(int argc, char *argv[]) {
 	PaintDevice paintDevice;
 	InputDevice input;
-	SystemInit();
+//	SystemInit();
 
 	PPMPixmap a = PPMPixmap("static/maze.ppm");
-	PPMPixmap p1 = PPMPixmap("static/pacman_right.ppm");
+	PPMPixmap p_right = PPMPixmap("static/pacman_right.ppm");
+	PPMPixmap p_left = PPMPixmap("static/pacman_left.ppm");
+	PPMPixmap p_up = PPMPixmap("static/pacman_up.ppm");
+	PPMPixmap p_bot = PPMPixmap("static/pacman_down.ppm");
 	Pacman pacman = Pacman();
 
 
-	Node * n1 = new Node(311, 262);
-	Node * n2 = new Node(241, 262);
-//	Node * n3 = new Node(381, 262);
+
+	Node * n1 = new Node(320, 270); // Center
+	Node * n2 = new Node(250, 270);
+	Node * n3 = new Node(390, 270);
+
 
 	n1->add(n2);
-//	n2->add(n1);
-
-//	n1.add(n3);
-//	n3.add(n1);
-
+	n1->add(n3);
 
 	pacman.now = n1;
 
@@ -46,10 +47,19 @@ int main(int argc, char *argv[]) {
 		pacman.update();
 
 		paintDevice.drawPixmap(a, 0, 0);
-		paintDevice.drawPixmap(p1, pacman.x, pacman.y);
+
+		if (pacman.dx < 0){
+			paintDevice.drawPixmap(p_left, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
+		} else if (pacman.dy > 0){
+			paintDevice.drawPixmap(p_bot, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
+		} else if (pacman.dy < 0){
+			paintDevice.drawPixmap(p_up, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
+		} else {
+			paintDevice.drawPixmap(p_right, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
+		}
 		paintDevice.swapBuffers();
 		paintDevice.clear();
-		usleep(1000);
+//		usleep(1);
 		printf("x = %i y = %i\n",pacman.x, pacman.y);
 	}
 }

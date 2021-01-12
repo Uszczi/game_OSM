@@ -15,56 +15,68 @@
 
 Pacman::Pacman()
 {
-    x = 311;
-    y = 262;
-    direction = 0;
-    next_direction = 0;
-    dx = 0;
-    dy = 0;
-    now = 0;
+	x = 320;
+	y = 270;
+	direction = 0;
+	next_direction = 0;
+	dx = 0;
+	dy = 0;
+	now = 0;
 }
 
 void Pacman::draw()
 {
-    return;
+	return;
 
 }
 
 void Pacman::update()
 {
+	now = now->change_now(x, y);
+
+
 	if (now->check_move(dx, dy, x, y))
 	{
 		x += dx;
 		y += dy;
-	} else {
-		printf("Nie moge juz sie poruszczy");
 	}
-
 }
 
 void Pacman::setDirection(int key)
 {
-	 switch(key)
-	 {
-	 case 106:
-	 	dx = 1;
-	 	dy = 0;
-	 	break;
+	switch(key)
+	{
+	case 106:
+		if (now->check_move(1, 0, x, y))
+		{
+			dx = 2;
+			dy = 0;
+		}
+		break;
 
-	 case 105:
-	 	dx = -1;
-	 	dy = 0;
-	 	break;
-	 case 103:
-		dx = 0;
-	 	dy = -1;
-	 	break;
+	case 105:
+		if (now->check_move(-1, 0, x, y))
+		{
+			dx = -2;
+			dy = 0;
+		}
+		break;
+	case 103:
+		if (now->check_move(0, -1, x, y))
+		{
+			dx = 0;
+			dy = -2;
+		}
+		break;
 
-	 case 108:
-		dx = 0;
-	 	dy = 1;
-	 	break;
-	 }
+	case 108:
+		if (now->check_move(0, 1, x, y))
+		{
+			dx = 0;
+			dy = 2;
+		}
+		break;
+	}
 }
 
 

@@ -11,7 +11,6 @@
 #include <stdio.h>
 
 
-
 class Node {
 public:
 	int x, y;
@@ -21,7 +20,7 @@ public:
 	virtual ~Node();
 	void add(Node *);
 	bool check_move(int, int, int, int);
-	Node * change_now(int, int);
+	Node *  change_now(int, int);
 };
 
 #endif /* NODE_H_ */

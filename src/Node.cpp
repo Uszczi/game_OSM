@@ -24,6 +24,9 @@ void Node::add(Node *n)
 {
 	ne[neigbours_len] = n;
 	neigbours_len++;
+
+	n->ne[n->neigbours_len] = this;
+	n->neigbours_len++;
 }
 
 
@@ -32,23 +35,25 @@ bool Node::check_move(int dx, int dy, int x, int y)
 {
 	for (int i = 0; i < neigbours_len; i++)
 	{
-		if ((dx > 0) & (x < ne[i]->x) & (y == ne[i]->y))
-		{
-
-			return true;
-		}
-		if ((dx < 0) && (x > ne[i]->x) && (y == ne[i]->y))
-		{
-			printf("Mowie mu dawaj w lewo");
-			return true; // Left
-		}
-		if ((dy > 0) & (y > ne[i]->y) & (x == ne[i]->x)) return true; // Bottom
-		if ((dy < 0) & (y < ne[i]->y) & (x == ne[i]->x)) return true; // Upper
+		if ((dx > 0) & (x < ne[i]->x) & (y == ne[i]->y)) return true; // Right
+		if ((dx < 0) && (x > ne[i]->x) && (y == ne[i]->y)) return true; // Left
+		if ((dy > 0) & (y < ne[i]->y) & (x == ne[i]->x)) return true; // Bottom
+		if ((dy < 0) & (y > ne[i]->y) & (x == ne[i]->x)) return true; // Upper
 	}
 
 	return false;
 }
 
+
+Node * Node::change_now(int x, int y)
+{
+	for (int i = 0; i < neigbours_len; i++)
+	{
+		if ((x == ne[i]->x) && (y == ne[i]->y)) return ne[i];
+	}
+
+	return this;
+}
 
 
 
