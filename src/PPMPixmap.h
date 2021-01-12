@@ -27,7 +27,7 @@ public:
 	}
 
 	const uint8_t *pixelAt(unsigned x, unsigned y) const {
-		return &data[(x + (y*width))*3];
+		return &data[(x + (y*width))*4];
 	}
 
 	unsigned colorAt(unsigned x, unsigned y) const;
@@ -45,6 +45,7 @@ public:
 
 private:
 	bool hasHeader(std::ifstream &file) const;
+	void convertAndStore(uint8_t *raw);
 };
 
 #endif /* PPMPIXMAP_H_ */

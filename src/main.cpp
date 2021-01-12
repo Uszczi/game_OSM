@@ -10,6 +10,8 @@
 #include "GameStatus.h"
 #include "MainMenu.h"
 
+#include <chrono>
+
 static const char* HIGH_SCORE_FILE = "highscore.txt";
 
 volatile long globalTimer_ms = 0;
@@ -38,11 +40,15 @@ int main(int argc, char *argv[])
 	PPMPixmap p4 = PPMPixmap("static/pacman_up.ppm");
 	PPMPixmap clyde = PPMPixmap("static/clyde.ppm");
 
+	unsigned sizeInc = 0;
 	while (!shouldExit)
 	{
+		auto start = std::chrono::steady_clock::now();
 		int key = input.getKey();
+
 		if(key)
 		{
+			++sizeInc;
 			printf("Pressed %d\n", key);
 			if(!gameStatus.getPlayingStatus())
 				menu.parseKey(key);
@@ -56,6 +62,10 @@ int main(int argc, char *argv[])
 		paintDevice.drawPixmap(p3, 119, 261);
 		paintDevice.drawPixmap(p4, 19, 261);
 		paintDevice.drawPixmap(clyde, 300, 200);
+		auto end = std::chrono::steady_clock::now();
+
+		paintDevice.drawText("FPS: "+ std::to_string(
+				1000000.0/std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()), 0, 0);
 
 		if(!gameStatus.getPlayingStatus())
 			menu.drawTo(paintDevice);
@@ -64,13 +74,8 @@ int main(int argc, char *argv[])
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
-
-		usleep(10000);
+		//usleep(10000);
 	}
-
-	gameStatus.addPoints(8000);
-	highscores.addEntry(gameStatus.getPoints());
-	highscores.save();
 
 	return 0;
 }
