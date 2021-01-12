@@ -23,10 +23,10 @@ int main(int argc, char *argv[]) {
 
 	Node * n1 = new Node(311, 262);
 	Node * n2 = new Node(241, 262);
-	Node * n3 = new Node(381, 262);
+//	Node * n3 = new Node(381, 262);
 
 	n1->add(n2);
-	n2->add(n1);
+//	n2->add(n1);
 
 //	n1.add(n3);
 //	n3.add(n1);

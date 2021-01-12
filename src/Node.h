@@ -8,6 +8,10 @@
 #ifndef NODE_H_
 #define NODE_H_
 
+#include <stdio.h>
+
+
+
 class Node {
 public:
 	int x, y;
@@ -16,7 +20,8 @@ public:
 	Node * ne[4];
 	virtual ~Node();
 	void add(Node *);
-	bool check_move(int, int);
+	bool check_move(int, int, int, int);
+	Node * change_now(int, int);
 };
 
 #endif /* NODE_H_ */

@@ -28,16 +28,27 @@ void Node::add(Node *n)
 
 
 
-bool Node::check_move(int dx, int dy)
+bool Node::check_move(int dx, int dy, int x, int y)
 {
 	for (int i = 0; i < neigbours_len; i++)
 	{
-		if ((dx > 0) & (x < ne[i]->x)) return true;
-		if ((dx < 0) & (x > ne[i]->x)) return true;
-		if ((dy > 0) & (y > ne[i]->y)) return true;
-		if ((dy < 0) & (y < ne[i]->y)) return true;
+		if ((dx > 0) & (x < ne[i]->x) & (y == ne[i]->y))
+		{
+
+			return true;
+		}
+		if ((dx < 0) && (x > ne[i]->x) && (y == ne[i]->y))
+		{
+			printf("Mowie mu dawaj w lewo");
+			return true; // Left
+		}
+		if ((dy > 0) & (y > ne[i]->y) & (x == ne[i]->x)) return true; // Bottom
+		if ((dy < 0) & (y < ne[i]->y) & (x == ne[i]->x)) return true; // Upper
 	}
 
 	return false;
 }
+
+
+
 

@@ -13,7 +13,6 @@
 #include "Pacman.h"
 
 
-
 Pacman::Pacman()
 {
     x = 311;
@@ -33,10 +32,12 @@ void Pacman::draw()
 
 void Pacman::update()
 {
-	if (now->check_move(dx, dy))
+	if (now->check_move(dx, dy, x, y))
 	{
 		x += dx;
-		y += dx;
+		y += dy;
+	} else {
+		printf("Nie moge juz sie poruszczy");
 	}
 
 }
@@ -46,22 +47,22 @@ void Pacman::setDirection(int key)
 	 switch(key)
 	 {
 	 case 106:
-	 	dx++;
+	 	dx = 1;
 	 	dy = 0;
 	 	break;
 
 	 case 105:
-	 	dx--;
+	 	dx = -1;
 	 	dy = 0;
 	 	break;
 	 case 103:
-		 dx = 0;
-	 	dy--;
+		dx = 0;
+	 	dy = -1;
 	 	break;
 
 	 case 108:
 		dx = 0;
-	 	dy++;
+	 	dy = 1;
 	 	break;
 	 }
 }

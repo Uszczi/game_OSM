@@ -8,7 +8,7 @@
 #ifndef PACMAN_H
 #define PACMAN_H
 #include "Node.h"
-
+#include <stdio.h>
 class Pacman {
 public:
 	int x, y;
