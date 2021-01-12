@@ -21,7 +21,7 @@ private:
     int direction;
     int next_direction;
 public:
-	Pacman();
+	Pacman(Node *startNode);
 
 	void draw();
 	void update();

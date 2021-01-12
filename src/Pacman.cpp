@@ -13,15 +13,16 @@
 #include "Pacman.h"
 
 
-Pacman::Pacman()
+Pacman::Pacman(Node *startNode) :
+	now(startNode)
 {
-	x = 320;
-	y = 270;
+	x = startNode->x;
+	y = startNode->y;
+
 	direction = 0;
 	next_direction = 0;
 	dx = 0;
 	dy = 0;
-	now = 0;
 }
 
 void Pacman::draw()

@@ -7,6 +7,7 @@
 
 #include "Maze.h"
 #include "Node.h"
+
 #include <utility>
 
 static const std::vector<std::pair<int, int>> coords = {
