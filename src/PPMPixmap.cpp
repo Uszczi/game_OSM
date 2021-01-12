@@ -7,10 +7,12 @@
 
 #include "PPMPixmap.h"
 
+#include <cstring>
+
 #include <string>
 #include <sstream>
 
-PPMPixmap::PPMPixmap(const char *filename) :
+PPMPixmap::PPMPixmap(const std::string &filename) :
 	data(nullptr),
 	width(640),
 	height(480)
@@ -36,9 +38,14 @@ PPMPixmap::PPMPixmap(const char *filename) :
 		ppmFile.seekg(0);
 	}
 
-	data = new uint8_t[width*height*3];			// Read image data
-	ppmFile.read((char*)data, width*height*3);
+	data = new uint8_t[width*height*4];
+	uint8_t *raw = new uint8_t[width*height*3];
+
+	ppmFile.read((char*)raw, width*height*3);
 	ppmFile.close();
+
+	convertAndStore(raw);
+	delete[] raw;
 }
 
 bool PPMPixmap::hasHeader(std::ifstream &file) const
@@ -51,10 +58,76 @@ bool PPMPixmap::hasHeader(std::ifstream &file) const
 	return false;
 }
 
+void PPMPixmap::convertAndStore(uint8_t *raw)
+{
+	unsigned a, b;
+	a = b = 0;
+
+	while(a < width*height*4)
+	{
+		data[a] = raw[b + 2];
+		data[a + 1] = raw[b + 1];
+		data[a + 2] = raw[b];
+		data[a + 3] = 0x00;
+
+		a += 4;
+		b += 3;
+	}
+
+}
+
+PPMPixmap::PPMPixmap(const PPMPixmap &other) :
+	width(other.width),
+	height(other.height)
+{
+	const size_t dataSize = width*height*3;
+	data = new uint8_t[dataSize];
+	memcpy(data, other.data, dataSize);
+}
+
+PPMPixmap::PPMPixmap(PPMPixmap &&other) :
+	width(other.width),
+	height(other.height)
+{
+	data = other.data;
+	other.data = nullptr;
+}
+
 PPMPixmap::~PPMPixmap()
 {
 	delete[] data;
 }
 
+unsigned PPMPixmap::colorAt(unsigned x, unsigned y) const {
+	const uint8_t *pixel = pixelAt(x, y);
 
+	return (unsigned)(pixel[0]) |
+			((unsigned)(pixel[1]) << 8) |
+			((unsigned)(pixel[2]) << 16);
+}
+
+PPMPixmap& PPMPixmap::operator=(const PPMPixmap &other)
+{
+	delete[] data;
+	width = other.width;
+	height = other.height;
+
+	const size_t dataSize = width*height*3;
+	data = new uint8_t[dataSize];
+	memcpy(data, other.data, dataSize);
+
+	return *this;
+}
+
+PPMPixmap& PPMPixmap::operator=(PPMPixmap &&other)
+{
+	delete[] data;
+	width = other.width;
+	height = other.height;
+
+	data = other.data;
+	other.data = nullptr;
+
+	return *this;
+}
 

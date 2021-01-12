@@ -7,14 +7,32 @@
 #include "PPMPixmap.h"
 #include "Pacman.h"
 
+#include "HighScore.h"
+#include "GameStatus.h"
+#include "MainMenu.h"
+
+#include <chrono>
+
+static const char* HIGH_SCORE_FILE = "highscore.txt";
+
 volatile long globalTimer_ms = 0;
 long startTime_ms;
 pthread_t tID;
 
-int main(int argc, char *argv[]) {
-	PaintDevice paintDevice;
+int main(int argc, char *argv[])
+{
+	SystemInit();
+	bool shouldExit = false;
+
+	PaintDevice paintDevice("static/font.ppm");
 	InputDevice input;
-//	SystemInit();
+
+	HighScore highscores(HIGH_SCORE_FILE);
+	MainMenu menu(highscores);
+	GameStatus gameStatus;
+
+	menu.setExitCallback([&](){shouldExit = true;});
+	menu.setPlayCallback([&](){gameStatus.setPlaying(true);});
 
 	PPMPixmap a = PPMPixmap("static/maze.ppm");
 	PPMPixmap p_right = PPMPixmap("static/pacman_right.ppm");
@@ -35,12 +53,20 @@ int main(int argc, char *argv[]) {
 
 	pacman.now = n1;
 
-	while (1)
+	unsigned sizeInc = 0;
+	while (!shouldExit)
 	{
+		auto start = std::chrono::steady_clock::now();
 		int key = input.getKey();
+
 		if(key)
 		{
+			++sizeInc;
 			printf("Pressed %d\n", key);
+			if(!gameStatus.getPlayingStatus())
+				menu.parseKey(key);
+			else if(key == KEY_ESC)
+				gameStatus.setPlaying(false);
 		}
 
 		pacman.setDirection(key);
@@ -57,11 +83,25 @@ int main(int argc, char *argv[]) {
 		} else {
 			paintDevice.drawPixmap(p_right, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
 		}
+
+		printf("x = %i y = %i\n",pacman.x, pacman.y);
+
+		paintDevice.drawPixmap(clyde, 300, 200);
+		auto end = std::chrono::steady_clock::now();
+
+		paintDevice.drawText("FPS: "+ std::to_string(
+				1000000.0/std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()), 0, 0);
+
+		if(!gameStatus.getPlayingStatus())
+			menu.drawTo(paintDevice);
+		else
+			paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
+
 		paintDevice.swapBuffers();
 		paintDevice.clear();
-//		usleep(1);
-		printf("x = %i y = %i\n",pacman.x, pacman.y);
 	}
+
+	return 0;
 }
 
 void* TimerThread(void* arguments)
