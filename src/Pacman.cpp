@@ -49,7 +49,7 @@ void Pacman::setDirection(int key)
 	case 106:
 		if (now->check_move(1, 0, x, y))
 		{
-			dx = 2;
+			dx = 1;
 			dy = 0;
 		}
 		break;
@@ -57,7 +57,7 @@ void Pacman::setDirection(int key)
 	case 105:
 		if (now->check_move(-1, 0, x, y))
 		{
-			dx = -2;
+			dx = -1;
 			dy = 0;
 		}
 		break;
@@ -65,7 +65,7 @@ void Pacman::setDirection(int key)
 		if (now->check_move(0, -1, x, y))
 		{
 			dx = 0;
-			dy = -2;
+			dy = -1;
 		}
 		break;
 
@@ -73,7 +73,7 @@ void Pacman::setDirection(int key)
 		if (now->check_move(0, 1, x, y))
 		{
 			dx = 0;
-			dy = 2;
+			dy = 1;
 		}
 		break;
 	}
