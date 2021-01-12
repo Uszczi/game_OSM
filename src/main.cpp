@@ -155,6 +155,8 @@ int main(int argc, char *argv[])
 	n25->add(n30);
 	n29->add(n31);
 
+
+
 	n15->add(start);
 
 	pacman.now = start;
@@ -202,6 +204,12 @@ int main(int argc, char *argv[])
 			menu.drawTo(paintDevice);
 		else
 			paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
+
+
+		for (int i = 0; i < pacman.now->neigbours_len; ++i)
+		{
+			paintDevice.drawRect(pacman.now->ne[i]->x,pacman.now->ne[i]->y ,8,8,0x0fff00);
+		}
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
