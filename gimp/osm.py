@@ -13,22 +13,38 @@ nodes.append([0,1,3,4])
 nodes.append([0,1,2,3,4])
 nodes.append([0,4])
 
-# i = 1
+i = 1
+for number, row in enumerate(nodes):
+    for r in row:
+        print(f"Node * n{i} = new Node({cols[r]}, {rows[number]});")
+        i += 1
+
+for number, row in enumerate(nodes):
+    for r in row:
+        print(f"Node * n{i} = new Node({cols_mirror[r]}, {rows[number]});")
+        i += 1
+
+
+# a = 0
 # for number, row in enumerate(nodes):
 #     for r in row:
-#         # print(f"Node * n{i} = new Node({rows[number]}, {cols[r]});")
-#         i += 1
+#         print(f"xx[{a}] = {cols[r]};")
+#         a += 1
+
+# b = 0
+# for number, row in enumerate(nodes):
+#     for r in row:
+#         print(f"yy[{b}] = {rows[number]};")
+#         b += 1
+
+# for number, row in enumerate(nodes):
+#     for r in row:
+#         print(f"xx[{a}] = {cols_mirror[r]};")
+#         a += 1
+
+# for number, row in enumerate(nodes):
+#     for r in row:
+#         print(f"yy[{b}] = {rows[number]};")
+#         b += 1
 
 
-
-i = 0
-for number, row in enumerate(nodes):
-    for r in row:
-        print(f"xx[{i}] = {cols[r]};")
-        i += 1
-
-i = 0
-for number, row in enumerate(nodes):
-    for r in row:
-        print(f"yy[{i}] = {rows[number]};")
-        i += 1
