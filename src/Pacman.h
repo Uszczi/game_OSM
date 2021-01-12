@@ -16,6 +16,7 @@ public:
 	int x, y;
 	int off_x = -9, off_y = -8;
     int dx, dy;
+    int next_dx, next_dy;
 	Node * now;
 private:
     int direction;

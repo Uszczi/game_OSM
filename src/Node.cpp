@@ -35,11 +35,16 @@ bool Node::check_move(int dx, int dy, int x, int y)
 {
 	for (int i = 0; i < neigbours_len; i++)
 	{
-		if ((dx > 0) & (x < ne[i]->x) & (y == ne[i]->y)) return true; // Right
+		if ((dx > 0) && (x < ne[i]->x) && (y == ne[i]->y)) return true; // Right
 		if ((dx < 0) && (x > ne[i]->x) && (y == ne[i]->y)) return true; // Left
-		if ((dy > 0) & (y < ne[i]->y) & (x == ne[i]->x)) return true; // Bottom
-		if ((dy < 0) & (y > ne[i]->y) & (x == ne[i]->x)) return true; // Upper
+		if ((dy > 0) && (y < ne[i]->y) && (x == ne[i]->x)) return true; // Bottom
+		if ((dy < 0) && (y > ne[i]->y) && (x == ne[i]->x)) return true; // Upper
 	}
+
+	if ((dx > 0) && (x < this->x)) return true;
+	if ((dx < 0) && (x > this->x)) return true;
+	if ((dy > 0) && (y < this->y)) return true;
+	if ((dy < 0) && (y > this->y)) return true;
 
 	return false;
 }
