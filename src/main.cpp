@@ -35,7 +35,12 @@ int main(int argc, char *argv[])
 	Game game;
 
 	menu.setExitCallback([&](){shouldExit = true;});
-	menu.setPlayCallback([&](){game.setPlaying(true);});
+	menu.setContinueCallback([&](){game.setPlaying(true);});
+
+	menu.setNewGameCallback([&](){
+		game.reset();
+		game.setPlaying(true);
+	});
 
 	auto prev = std::chrono::steady_clock::now();
 	while (!shouldExit)

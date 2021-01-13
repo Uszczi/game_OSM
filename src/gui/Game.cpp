@@ -10,15 +10,27 @@
 
 Game::Game() :
 	mazePixmap(std::string("static/maze.ppm")),
-	pacman(maze.start()),
-	pacmanGraphic(&pacman)
+	pacman(new Pacman(maze.start())),
+	pacmanGraphic(pacman)
 {
 
 }
 
+Game::~Game()
+{
+	delete pacman;
+}
+
+void Game::reset()
+{
+	delete pacman;
+	pacman = new Pacman(maze.start());
+	pacmanGraphic.setPacman(pacman);
+}
+
 void Game::processInput(int input)
 {
-	pacman.setDirection(Pacman::keyToDirection(input));
+	pacman->setDirection(Pacman::keyToDirection(input));
 
 	if(input == KEY_ESC)
 		is_playing = false;
@@ -26,7 +38,7 @@ void Game::processInput(int input)
 
 void Game::update(double dt)
 {
-	pacman.update();
+	pacman->update();
 }
 
 void Game::drawTo(PaintDevice &paintDevice) const
@@ -42,10 +54,10 @@ void Game::drawTo(PaintDevice &paintDevice) const
 
 void Game::drawDebug(PaintDevice &paintDevice) const
 {
-	for (int i = 0; i < pacman.currentNode()->neigbours_len; ++i)
+	for (int i = 0; i < pacman->currentNode()->neigbours_len; ++i)
 	{
-		paintDevice.drawRect(pacman.currentNode()->ne[i]->x,
-				pacman.currentNode()->ne[i]->y,
+		paintDevice.drawRect(pacman->currentNode()->ne[i]->x,
+				pacman->currentNode()->ne[i]->y,
 				8, 8 ,0x0fff00);
 	}
 }

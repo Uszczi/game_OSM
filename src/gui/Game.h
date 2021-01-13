@@ -23,7 +23,7 @@ class Game
 	Maze maze;
 	PPMPixmap mazePixmap;
 
-	Pacman pacman;
+	Pacman *pacman;
 	PacmanGraphic pacmanGraphic;
 
 	bool isInDebugMode = false;
@@ -31,10 +31,13 @@ class Game
 
 public:
 	Game();
+	virtual ~Game();
 
 	void processInput(int input);
 	void update(double dt);
 	void drawTo(PaintDevice &paintDevice) const;
+
+	void reset();
 
 	void setDebugMode(bool debug) {
 		isInDebugMode = debug;

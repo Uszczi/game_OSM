@@ -9,6 +9,7 @@
 #include "../hardware/KeyMapping.h"
 
 #include <string>
+#include <vector>
 
 constexpr unsigned MENU_WIDTH = 280;
 constexpr unsigned MENU_HEIGHT = 400;
@@ -21,7 +22,7 @@ constexpr unsigned COLOR_HIGHTLIGHT = 0x696969;
 
 MainMenu::MainMenu(const HighScore &highscores) :
 	highScores(highscores),
-	currentAction(MenuAction::Play)
+	currentAction(MenuAction::Continue)
 {
 
 }
@@ -40,9 +41,12 @@ void MainMenu::drawTo(PaintDevice &outputDevice) const
 	}
 }
 
-
 void MainMenu::drawMainMenu(PaintDevice &outputDevice) const
 {
+	static const std::vector<std::string> options = {
+			"Continue", "New Game", "High Scores", "Exit"
+	};
+
 	const unsigned x0 = (outputDevice.getWidth() - MENU_WIDTH)/2;
 	const unsigned y0 = (outputDevice.getHeight() - MENU_HEIGHT)/2;
 
@@ -52,9 +56,12 @@ void MainMenu::drawMainMenu(PaintDevice &outputDevice) const
 			MENU_WIDTH - 2*X_TEXT_OFFSET,
 			CHAR_SIZE_Y, COLOR_HIGHTLIGHT);
 
-	outputDevice.drawText("Play", x0 + X_TEXT_OFFSET, y0 + Y_TEXT_OFFSET);
-	outputDevice.drawText("High Scores", x0 + X_TEXT_OFFSET, y0 + 2*Y_TEXT_OFFSET);
-	outputDevice.drawText("Exit", x0 + X_TEXT_OFFSET, y0 + 3*Y_TEXT_OFFSET);
+	int offset = 1;
+	for(const auto& option: options)
+	{
+		outputDevice.drawText(option, x0 + X_TEXT_OFFSET, y0 + offset*Y_TEXT_OFFSET);
+		++offset;
+	}
 }
 
 void MainMenu::drawHighScores(PaintDevice &outputDevice) const
@@ -87,7 +94,9 @@ void MainMenu::drawHighScores(PaintDevice &outputDevice) const
 
 void MainMenu::processInput(int key)
 {
+	constexpr int ACTION_COUNT = 4;
 	int actionIdx = (int)currentAction;
+
 	switch(key)
 	{
 	case KEY_ENTER:
@@ -98,11 +107,11 @@ void MainMenu::processInput(int key)
 		}
 		break;
 	case ARROW_DOWN:
-		currentAction = (MenuAction)((actionIdx + 1) % 3);
+		currentAction = (MenuAction)((actionIdx + 1) % ACTION_COUNT);
 		break;
 	case ARROW_UP:
 		if(actionIdx == 0)
-			currentAction = (MenuAction)(2);
+			currentAction = (MenuAction)(ACTION_COUNT - 1);
 		else
 			currentAction = (MenuAction)(actionIdx - 1);
 		break;
@@ -113,8 +122,11 @@ void MainMenu::processInput(int key)
 
 void MainMenu::invokeSelectedAction()
 {
-	if(currentAction == MenuAction::Play) {
-		if(playCallback) playCallback();
+	if(currentAction == MenuAction::Continue) {
+		if(continueCallback) continueCallback();
+	}
+	else if(currentAction == MenuAction::NewGame) {
+		if(newGameCallback) newGameCallback();
 	}
 	else if(currentAction == MenuAction::Exit) {
 		if(exitCallback) exitCallback();
