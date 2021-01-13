@@ -1,16 +1,16 @@
 #include "main.h"
-#include "peripherals.h"
-#include "utilities.h"
+#include "hardware/PaintDevice.h"
+#include "hardware/InputDevice.h"
 
-#include "PaintDevice.h"
-#include "InputDevice.h"
-#include "PPMPixmap.h"
-#include "Pacman.h"
-#include "Maze.h"
+#include "game/Pacman.h"
+#include "game/Maze.h"
+#include "game/GameStatus.h"
 
-#include "HighScore.h"
-#include "GameStatus.h"
-#include "MainMenu.h"
+#include "gui/MainMenu.h"
+#include "gui/HighScore.h"
+#include "gui/PPMPixmap.h"
+
+#include "gui/PacmanGraphic.h"
 
 #include <chrono>
 
@@ -36,16 +36,11 @@ int main(int argc, char *argv[])
 	menu.setPlayCallback([&](){gameStatus.setPlaying(true);});
 
 	PPMPixmap a = PPMPixmap("static/maze.ppm");
-	PPMPixmap p_right = PPMPixmap("static/pacman_right.ppm");
-	PPMPixmap p_left = PPMPixmap("static/pacman_left.ppm");
-	PPMPixmap p_up = PPMPixmap("static/pacman_up.ppm");
-	PPMPixmap p_bot = PPMPixmap("static/pacman_down.ppm");
-	Pacman pacman = Pacman();
+
 	Maze maze;
+	Pacman pacman = Pacman(maze.start());
+	PacmanGraphic pacmanGraphic(&pacman);
 
-	pacman.now = maze.start();
-
-	unsigned sizeInc = 0;
 	while (!shouldExit)
 	{
 		auto start = std::chrono::steady_clock::now();
@@ -53,7 +48,6 @@ int main(int argc, char *argv[])
 
 		if(key)
 		{
-			++sizeInc;
 			printf("Pressed %d\n", key);
 			if(!gameStatus.getPlayingStatus())
 				menu.parseKey(key);
@@ -61,24 +55,12 @@ int main(int argc, char *argv[])
 				gameStatus.setPlaying(false);
 		}
 
-		pacman.setDirection(key);
+		pacman.setDirection(Pacman::keyToDirection(key));
 		pacman.update();
 
 		paintDevice.drawPixmap(a, 0, 0);
+		pacmanGraphic.drawTo(paintDevice);
 
-		if (pacman.dx < 0){
-			paintDevice.drawPixmap(p_left, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
-		} else if (pacman.dy > 0){
-			paintDevice.drawPixmap(p_bot, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
-		} else if (pacman.dy < 0){
-			paintDevice.drawPixmap(p_up, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
-		} else {
-			paintDevice.drawPixmap(p_right, pacman.x + pacman.off_x, pacman.y + pacman.off_y);
-		}
-
-		printf("x = %i y = %i\n",pacman.x, pacman.y);
-
-	//	paintDevice.drawPixmap(clyde, 300, 200);
 		auto end = std::chrono::steady_clock::now();
 
 		paintDevice.drawText("FPS: "+ std::to_string(
@@ -90,9 +72,11 @@ int main(int argc, char *argv[])
 			paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
 
 
-		for (int i = 0; i < pacman.now->neigbours_len; ++i)
+		for (int i = 0; i < pacman.currentNode()->neigbours_len; ++i)
 		{
-			paintDevice.drawRect(pacman.now->ne[i]->x,pacman.now->ne[i]->y ,8,8,0x0fff00);
+			paintDevice.drawRect(pacman.currentNode()->ne[i]->x,
+					pacman.currentNode()->ne[i]->y,
+					8,8,0x0fff00);
 		}
 
 		paintDevice.swapBuffers();

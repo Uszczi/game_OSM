@@ -16,13 +16,6 @@
 #include <time.h>
 #include <pthread.h>
 
-#include "utilities.h"
-#include "peripherals.h"
-
 void SystemInit();
-void SystemExit();
-
-void ClearScreen();
-void PrintDiagnosticInfo();
 
 #endif /* SRC_MAIN_H_ */
