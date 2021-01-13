@@ -11,6 +11,8 @@
 #include "gui/HighScore.h"
 #include "gui/PacmanGraphic.h"
 
+#include "gui/Game.h"
+
 #include "misc/DataInfo.h"
 
 #include <chrono>
@@ -29,59 +31,48 @@ int main(int argc, char *argv[])
 
 	HighScore highscores(HIGH_SCORE_FILE);
 	MainMenu menu(highscores);
-	GameStatus gameStatus;
+
+	Game game;
 
 	menu.setExitCallback([&](){shouldExit = true;});
-	menu.setPlayCallback([&](){gameStatus.setPlaying(true);});
+	menu.setPlayCallback([&](){game.setPlaying(true);});
 
-	PPMPixmap mazePixmap = PPMPixmap("static/maze.ppm");
-
-	Maze maze;
-	Pacman pacman = Pacman(maze.start());
-	PacmanGraphic pacmanGraphic(&pacman);
-
+	auto prev = std::chrono::steady_clock::now();
 	while (!shouldExit)
 	{
-		auto start = std::chrono::steady_clock::now();
+		auto current = std::chrono::steady_clock::now();
+		const auto dt_us = std::chrono::duration_cast<std::chrono::microseconds>(current - prev);
+		prev = current;
+
 		int key = input.getKey();
 
 		if(key)
 		{
 			printf("Pressed %d\n", key);
-			if(!gameStatus.getPlayingStatus())
-				menu.parseKey(key);
-			else if(key == KEY_ESC)
-				gameStatus.setPlaying(false);
-			else if(key == KEY_SPACE)
+
+			if(!game.isPlaying())
+				menu.processInput(key);
+			else
+				game.processInput(key);
+
+			if(key == KEY_SPACE) {
 				showDebug = !showDebug;
-		}
-
-		pacman.setDirection(Pacman::keyToDirection(key));
-		pacman.update();
-
-		paintDevice.drawPixmap(mazePixmap, 0, 0);
-
-		if(showDebug)
-		{
-			for (int i = 0; i < pacman.currentNode()->neigbours_len; ++i)
-			{
-				paintDevice.drawRect(pacman.currentNode()->ne[i]->x,
-						pacman.currentNode()->ne[i]->y,
-						8, 8 ,0x0fff00);
+				game.setDebugMode(showDebug);
 			}
 		}
 
-		pacmanGraphic.drawTo(paintDevice);
+		const double dt_s = dt_us.count()/1000000.0;
+		if(game.isPlaying())
+			game.update(dt_s);
 
-		if(!gameStatus.getPlayingStatus())
+		fpsInfo.add(1.0/dt_s);
+
+		game.drawTo(paintDevice);
+
+		if(!game.isPlaying())
 			menu.drawTo(paintDevice);
-		else
-			paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
 
 		paintDevice.drawText("FPS: "+ std::to_string((unsigned)fpsInfo.averange()), 0, 0);
-
-		auto end = std::chrono::steady_clock::now();
-		fpsInfo.add(1000000.0/std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
