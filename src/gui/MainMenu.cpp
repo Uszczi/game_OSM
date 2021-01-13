@@ -6,10 +6,9 @@
  */
 
 #include "MainMenu.h"
-#include "KeyMapping.h"
+#include "../hardware/KeyMapping.h"
 
 #include <string>
-#include <iostream>
 
 constexpr unsigned MENU_WIDTH = 280;
 constexpr unsigned MENU_HEIGHT = 400;
@@ -86,7 +85,7 @@ void MainMenu::drawHighScores(PaintDevice &outputDevice) const
 }
 
 
-void MainMenu::parseKey(int key)
+void MainMenu::processInput(int key)
 {
 	int actionIdx = (int)currentAction;
 	switch(key)

@@ -8,7 +8,7 @@
 #ifndef PAINTDEVICE_H_
 #define PAINTDEVICE_H_
 
-#include "PPMPixmap.h"
+#include "../gui/PPMPixmap.h"
 
 #include <linux/fb.h>
 #include <string>

@@ -8,10 +8,19 @@
 #ifndef MAZE_H_
 #define MAZE_H_
 
-class Maze {
+#include <vector>
+
+class Node;
+
+class Maze
+{
+	std::vector<Node*> nodes;
+
 public:
 	Maze();
 	virtual ~Maze();
+
+	Node* start() const;
 };
 
 #endif /* MAZE_H_ */
