@@ -85,7 +85,7 @@ void MainMenu::drawHighScores(PaintDevice &outputDevice) const
 }
 
 
-void MainMenu::parseKey(int key)
+void MainMenu::processInput(int key)
 {
 	int actionIdx = (int)currentAction;
 	switch(key)

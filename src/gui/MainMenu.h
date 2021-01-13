@@ -41,7 +41,7 @@ public:
 		exitCallback = newCallback;
 	}
 
-	void parseKey(int key);
+	void processInput(int key);
 	void drawTo(PaintDevice &outputDevice) const;
 
 private:
