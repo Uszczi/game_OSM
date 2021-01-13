@@ -1,29 +1,28 @@
-#include "main.h"
 #include "hardware/PaintDevice.h"
 #include "hardware/InputDevice.h"
+#include "hardware/KeyMapping.h"
 
 #include "game/Pacman.h"
 #include "game/Maze.h"
 #include "game/GameStatus.h"
 
+#include "gui/PPMPixmap.h"
 #include "gui/MainMenu.h"
 #include "gui/HighScore.h"
-#include "gui/PPMPixmap.h"
-
 #include "gui/PacmanGraphic.h"
+
+#include "misc/DataInfo.h"
 
 #include <chrono>
 
 static const char* HIGH_SCORE_FILE = "highscore.txt";
 
-volatile long globalTimer_ms = 0;
-long startTime_ms;
-pthread_t tID;
-
 int main(int argc, char *argv[])
 {
-	SystemInit();
 	bool shouldExit = false;
+	bool showDebug = false;
+
+	DataInfo fpsInfo(128);
 
 	PaintDevice paintDevice("static/font.ppm");
 	InputDevice input;
@@ -35,7 +34,7 @@ int main(int argc, char *argv[])
 	menu.setExitCallback([&](){shouldExit = true;});
 	menu.setPlayCallback([&](){gameStatus.setPlaying(true);});
 
-	PPMPixmap a = PPMPixmap("static/maze.ppm");
+	PPMPixmap mazePixmap = PPMPixmap("static/maze.ppm");
 
 	Maze maze;
 	Pacman pacman = Pacman(maze.start());
@@ -53,61 +52,40 @@ int main(int argc, char *argv[])
 				menu.parseKey(key);
 			else if(key == KEY_ESC)
 				gameStatus.setPlaying(false);
+			else if(key == KEY_SPACE)
+				showDebug = !showDebug;
 		}
 
 		pacman.setDirection(Pacman::keyToDirection(key));
 		pacman.update();
 
-		paintDevice.drawPixmap(a, 0, 0);
+		paintDevice.drawPixmap(mazePixmap, 0, 0);
+
+		if(showDebug)
+		{
+			for (int i = 0; i < pacman.currentNode()->neigbours_len; ++i)
+			{
+				paintDevice.drawRect(pacman.currentNode()->ne[i]->x,
+						pacman.currentNode()->ne[i]->y,
+						8, 8 ,0x0fff00);
+			}
+		}
+
 		pacmanGraphic.drawTo(paintDevice);
-
-		auto end = std::chrono::steady_clock::now();
-
-		paintDevice.drawText("FPS: "+ std::to_string(
-				1000000.0/std::chrono::duration_cast<std::chrono::microseconds>(end - start).count()), 0, 0);
 
 		if(!gameStatus.getPlayingStatus())
 			menu.drawTo(paintDevice);
 		else
 			paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
 
+		paintDevice.drawText("FPS: "+ std::to_string((unsigned)fpsInfo.averange()), 0, 0);
 
-		for (int i = 0; i < pacman.currentNode()->neigbours_len; ++i)
-		{
-			paintDevice.drawRect(pacman.currentNode()->ne[i]->x,
-					pacman.currentNode()->ne[i]->y,
-					8,8,0x0fff00);
-		}
+		auto end = std::chrono::steady_clock::now();
+		fpsInfo.add(1000000.0/std::chrono::duration_cast<std::chrono::microseconds>(end - start).count());
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
 	}
 
 	return 0;
-}
-
-void* TimerThread(void* arguments)
-{
-	struct timespec destTime;
-	clock_gettime(CLOCK_MONOTONIC,&destTime);
-	while(1)
-	{
-		destTime.tv_nsec+=1000000;
-		if(destTime.tv_nsec>=1E9)
-		{
-			destTime.tv_nsec-=1E9;
-			destTime.tv_sec++;
-		}
-		globalTimer_ms++;
-		clock_nanosleep(CLOCK_MONOTONIC, TIMER_ABSTIME, &destTime, NULL);
-	}
-	return NULL;
-}
-
-void SystemInit()
-{
-	pthread_create(&tID, NULL, TimerThread, NULL);
-	struct timeval tTime;
-	gettimeofday(&tTime,NULL);
-	startTime_ms=tTime.tv_sec*1000+tTime.tv_usec/1000;
 }
