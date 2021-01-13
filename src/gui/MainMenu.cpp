@@ -6,10 +6,9 @@
  */
 
 #include "MainMenu.h"
-#include "KeyMapping.h"
+#include "../hardware/KeyMapping.h"
 
 #include <string>
-#include <iostream>
 
 constexpr unsigned MENU_WIDTH = 280;
 constexpr unsigned MENU_HEIGHT = 400;

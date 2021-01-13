@@ -8,7 +8,7 @@
 #ifndef MAINMENU_H_
 #define MAINMENU_H_
 
-#include "PaintDevice.h"
+#include "../hardware/PaintDevice.h"
 #include "HighScore.h"
 
 #include <functional>
