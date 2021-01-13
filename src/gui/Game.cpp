@@ -37,6 +37,8 @@ void Game::drawTo(PaintDevice &paintDevice) const
 		drawDebug(paintDevice);
 
 	pacmanGraphic.drawTo(paintDevice);
+
+	paintDevice.drawText("HP: " + std::to_string(gameStatus.getLifeCount()), 0, paintDevice.getHeight() - 50);
 	paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);
 }
 

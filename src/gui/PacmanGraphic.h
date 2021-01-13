@@ -23,6 +23,11 @@ class PacmanGraphic : GraphicObject {
 
 public:
 	PacmanGraphic(const Pacman *pacman);
+
+	void setPacman(const Pacman *pacman) {
+		this->pacman = pacman;
+	}
+
 	virtual void drawTo(PaintDevice &paintDevice) const override;
 };
 

@@ -15,7 +15,8 @@
 
 enum class MenuAction
 {
-	Play = 0,
+	Continue = 0,
+	NewGame,
 	HighScores,
 	Exit
 };
@@ -24,7 +25,8 @@ class MainMenu {
 private:
 	const HighScore &highScores;
 
-	std::function<void()> playCallback;
+	std::function<void()> continueCallback;
+	std::function<void()> newGameCallback;
 	std::function<void()> exitCallback;
 
 	MenuAction currentAction;
@@ -33,8 +35,12 @@ private:
 public:
 	MainMenu(const HighScore &highscores);
 
-	void setPlayCallback(const std::function<void()> &newCallback) {
-		playCallback = newCallback;
+	void setContinueCallback(const std::function<void()> &newCallback) {
+		continueCallback = newCallback;
+	}
+
+	void setNewGameCallback(const std::function<void()> &newCallback) {
+		newGameCallback = newCallback;
 	}
 
 	void setExitCallback(const std::function<void()> &newCallback) {
