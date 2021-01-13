@@ -11,7 +11,7 @@
 #include "gui/HighScore.h"
 #include "gui/PacmanGraphic.h"
 
-#include "gui/Game.h"
+#include "gui/game.h"
 
 #include "misc/DataInfo.h"
 
@@ -32,14 +32,15 @@ int main(int argc, char *argv[])
 	HighScore highscores(HIGH_SCORE_FILE);
 	MainMenu menu(highscores);
 
-	Game game;
+	Game *game = new Game;
 
 	menu.setExitCallback([&](){shouldExit = true;});
-	menu.setContinueCallback([&](){game.setPlaying(true);});
+	menu.setContinueCallback([&](){game->setPlaying(true);});
 
 	menu.setNewGameCallback([&](){
-		game.reset();
-		game.setPlaying(true);
+		delete game;
+		game = new Game;
+		game->setPlaying(true);
 	});
 
 	auto prev = std::chrono::steady_clock::now();
@@ -55,26 +56,26 @@ int main(int argc, char *argv[])
 		{
 			printf("Pressed %d\n", key);
 
-			if(!game.isPlaying())
+			if(!game->isPlaying())
 				menu.processInput(key);
 			else
-				game.processInput(key);
+				game->processInput(key);
 
 			if(key == KEY_SPACE) {
 				showDebug = !showDebug;
-				game.setDebugMode(showDebug);
+				game->setDebugMode(showDebug);
 			}
 		}
 
 		const double dt_s = dt_us.count()/1000000.0;
-		if(game.isPlaying())
-			game.update(dt_s);
-
 		fpsInfo.add(1.0/dt_s);
 
-		game.drawTo(paintDevice);
+		if(game->isPlaying())
+			game->update(dt_s);
 
-		if(!game.isPlaying())
+		game->drawTo(paintDevice);
+
+		if(!game->isPlaying())
 			menu.drawTo(paintDevice);
 
 		paintDevice.drawText("FPS: "+ std::to_string((unsigned)fpsInfo.averange()), 0, 0);
