@@ -26,6 +26,8 @@ private:
 
 	int x, y;
     int dx, dy;
+    int next_dx;
+    int	next_dy;
 
     int direction;
     int next_direction;

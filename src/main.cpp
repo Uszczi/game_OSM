@@ -72,15 +72,7 @@ int main(int argc, char *argv[])
 		if(!game.isPlaying())
 			menu.drawTo(paintDevice);
 
-<<<<<<< HEAD
-
-//		for (int i = 0; i < pacman.now->neigbours_len; ++i)
-//		{
-//			paintDevice.drawRect(pacman.now->ne[i]->x,pacman.now->ne[i]->y ,8,8,0x0fff00);
-//		}
-=======
 		paintDevice.drawText("FPS: "+ std::to_string((unsigned)fpsInfo.averange()), 0, 0);
->>>>>>> maze/refactorization
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();

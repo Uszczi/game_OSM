@@ -10,6 +10,7 @@
 Node::Node(int x, int y) {
 	this->x = x;
 	this->y = y;
+
 	ne[0] = 0;
 	ne[1] = 0;
 	ne[2] = 0;
@@ -29,8 +30,6 @@ void Node::add(Node *n)
 	n->neigbours_len++;
 }
 
-
-
 bool Node::check_move(int dx, int dy, int x, int y)
 {
 	for (int i = 0; i < neigbours_len; i++)
@@ -49,7 +48,6 @@ bool Node::check_move(int dx, int dy, int x, int y)
 	return false;
 }
 
-
 Node * Node::change_now(int x, int y)
 {
 	for (int i = 0; i < neigbours_len; i++)
@@ -59,6 +57,3 @@ Node * Node::change_now(int x, int y)
 
 	return this;
 }
-
-
-

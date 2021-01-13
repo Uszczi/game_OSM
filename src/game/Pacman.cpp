@@ -5,11 +5,6 @@
  *      Author: Mateusz
  */
 
-// direction = RIGHT = 0
-// direction = LEFT = 1
-// direction = TOP = 2
-// direction = DOWN = 3
-
 #include "Pacman.h"
 #include "../hardware/KeyMapping.h"
 
@@ -39,6 +34,9 @@ Pacman::Pacman(Node *startNode) :
 	dx = 0;
 	dy = 0;
 
+	next_dx = 0;
+	next_dy = 0;
+
 	direction = 0;
 	next_direction = 0;
 }
@@ -46,6 +44,12 @@ Pacman::Pacman(Node *startNode) :
 void Pacman::update()
 {
 	now = now->change_now(x, y);
+
+	if (now->check_move(next_dx, next_dy, x, y))
+	{
+		dx = next_dx;
+		dy = next_dy;
+	}
 
 	if (now->check_move(dx, dy, x, y))
 	{
@@ -59,35 +63,25 @@ void Pacman::setDirection(PacmanDirection direction)
 	switch(direction)
 	{
 	case PacmanDirection::Right:
-		if (now->check_move(1, 0, x, y))
-		{
-			dx = 1;
-			dy = 0;
-		}
+		next_dx = 1;
+		next_dy = 0;
 		break;
 
 	case PacmanDirection::Left:
-		if (now->check_move(-1, 0, x, y))
-		{
-			dx = -1;
-			dy = 0;
-		}
+		next_dx = -1;
+		next_dy = 0;
 		break;
+
 	case PacmanDirection::Up:
-		if (now->check_move(0, -1, x, y))
-		{
-			dx = 0;
-			dy = -1;
-		}
+		next_dx = 0;
+		next_dy = -1;
 		break;
 
 	case PacmanDirection::Down:
-		if (now->check_move(0, 1, x, y))
-		{
-			dx = 0;
-			dy = 1;
-		}
+		next_dx = 0;
+		next_dy = 1;
 		break;
+
 	default:
 		break;
 	}
