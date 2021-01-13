@@ -9,24 +9,39 @@
 #define PACMAN_H
 
 #include "Node.h"
-#include <stdio.h>
+#include <utility>
+
+enum class PacmanDirection {
+	NoMove,
+	Up,
+	Down,
+	Left,
+	Right
+};
 
 class Pacman {
-public:
-	int x, y;
-	int off_x = -9, off_y = -8;
-    int dx, dy;
-	Node * now;
 private:
+	Node *now;
+	int off_x = -9, off_y = -8;
+
+	int x, y;
+    int dx, dy;
+
     int direction;
     int next_direction;
 public:
 	Pacman(Node *startNode);
+	static PacmanDirection keyToDirection(int key);
 
-	void draw();
+	Node *currentNode() const {
+		return now;
+	}
+
 	void update();
-    void setDirection(int key);
+    void setDirection(PacmanDirection direction);
 
+    std::pair<int, int> getPos() const;
+    std::pair<int, int> getSpeed() const;
 };
 
 #endif /* PACMAN_H_ */

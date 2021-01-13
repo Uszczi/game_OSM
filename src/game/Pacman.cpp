@@ -11,7 +11,24 @@
 // direction = DOWN = 3
 
 #include "Pacman.h"
+#include "../hardware/KeyMapping.h"
 
+PacmanDirection Pacman::keyToDirection(int key)
+{
+	switch(key)
+	{
+	case ARROW_UP:
+		return PacmanDirection::Up;
+	case ARROW_DOWN:
+		return PacmanDirection::Down;
+	case ARROW_LEFT:
+		return PacmanDirection::Left;
+	case ARROW_RIGHT:
+		return PacmanDirection::Right;
+	}
+
+	return PacmanDirection::NoMove;
+}
 
 Pacman::Pacman(Node *startNode) :
 	now(startNode)
@@ -19,22 +36,16 @@ Pacman::Pacman(Node *startNode) :
 	x = startNode->x;
 	y = startNode->y;
 
-	direction = 0;
-	next_direction = 0;
 	dx = 0;
 	dy = 0;
-}
 
-void Pacman::draw()
-{
-	return;
-
+	direction = 0;
+	next_direction = 0;
 }
 
 void Pacman::update()
 {
 	now = now->change_now(x, y);
-
 
 	if (now->check_move(dx, dy, x, y))
 	{
@@ -43,11 +54,11 @@ void Pacman::update()
 	}
 }
 
-void Pacman::setDirection(int key)
+void Pacman::setDirection(PacmanDirection direction)
 {
-	switch(key)
+	switch(direction)
 	{
-	case 106:
+	case PacmanDirection::Right:
 		if (now->check_move(1, 0, x, y))
 		{
 			dx = 1;
@@ -55,14 +66,14 @@ void Pacman::setDirection(int key)
 		}
 		break;
 
-	case 105:
+	case PacmanDirection::Left:
 		if (now->check_move(-1, 0, x, y))
 		{
 			dx = -1;
 			dy = 0;
 		}
 		break;
-	case 103:
+	case PacmanDirection::Up:
 		if (now->check_move(0, -1, x, y))
 		{
 			dx = 0;
@@ -70,14 +81,24 @@ void Pacman::setDirection(int key)
 		}
 		break;
 
-	case 108:
+	case PacmanDirection::Down:
 		if (now->check_move(0, 1, x, y))
 		{
 			dx = 0;
 			dy = 1;
 		}
 		break;
+	default:
+		break;
 	}
 }
 
+std::pair<int, int> Pacman::getPos() const
+{
+	return std::make_pair(x + off_x, y + off_y);
+}
 
+std::pair<int, int> Pacman::getSpeed() const
+{
+	return std::make_pair(dx, dy);
+}
