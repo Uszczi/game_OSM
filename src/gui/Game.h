@@ -15,6 +15,9 @@
 #include "../game/Pacman.h"
 
 #include "PacmanGraphic.h"
+#include "ScorePoint.h"
+
+#include <list>
 
 class Game
 {
@@ -25,6 +28,7 @@ class Game
 
 	Pacman pacman;
 	PacmanGraphic pacmanGraphic;
+	std::list<ScorePoint> points;
 
 	bool isInDebugMode = false;
 	bool is_playing = false;
