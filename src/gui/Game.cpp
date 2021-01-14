@@ -8,21 +8,15 @@
 #include "Game.h"
 #include "../hardware/KeyMapping.h"
 
-std::vector<std::pair<int, int>> pointsPos = {
-		{124, 20}, {153, 20}, {182, 20}, {211, 20}, {240, 20}, {269, 20},
-		{124, 49}, {204, 49}, {296, 49}, {124, 78}, {153, 78}, {182, 78},
-		{211, 78}, {240, 78}, {269, 78}, {124, 107}, {204, 107}, {250, 107},
-		{124, 136}, {153, 136}, {182, 136}, {250, 136}, {279, 136}, {204, 165},
-		{296, 165}, {204, 194}, {204, 223}, {204, 252}, {204, 281}, {124, 310},
-		{153, 310}, {182, 310}, {211, 310}, {240, 310}, {269, 310}
-};
-
 Game::Game() :
 	mazePixmap(std::string("static/maze.ppm")),
 	pacman(maze.start()),
 	pacmanGraphic(&pacman)
 {
-	for(const auto& pos : pointsPos)
+	for(const auto& pos : maze.getNodePoints())
+		points.push_back(ScorePoint(pos.first, pos.second));
+
+	for(const auto& pos : maze.getAdditionalPoints())
 		points.push_back(ScorePoint(pos.first, pos.second));
 }
 
