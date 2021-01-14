@@ -126,11 +126,8 @@ bool PaintDevice::isInBounds(unsigned x, unsigned y) const
 
 void PaintDevice::setPixel(unsigned x, unsigned y, unsigned color)
 {
-	uint8_t *pixel = pixelAt(x, y);
-	pixel[0] = ((uint8_t*)&color)[0];
-	pixel[1] = ((uint8_t*)&color)[1];
-	pixel[2] = ((uint8_t*)&color)[2];
-	pixel[3] = 0x00;
+	uint32_t *pixel = (uint32_t*)pixelAt(x, y);
+	*pixel = color;
 }
 
 void PaintDevice::clear()
