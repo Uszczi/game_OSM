@@ -15,7 +15,8 @@ PacmanGraphic::PacmanGraphic(const Pacman *pacman) :
 	p_up(std::string("static/pacman_up.ppm")),
 	p_down(std::string("static/pacman_down.ppm"))
 {
-
+	width = p_right.getWidth();
+	height = p_right.getHeight();
 }
 
 void PacmanGraphic::drawTo(PaintDevice &paintDevice) const
@@ -32,4 +33,10 @@ void PacmanGraphic::drawTo(PaintDevice &paintDevice) const
 	} else {
 		paintDevice.drawPixmap(p_right, pos.first, pos.second);
 	}
+}
+
+Rect PacmanGraphic::boundingRect() const
+{
+	auto pos = pacman->getPos();
+	return Rect(pos.first, pos.second, width, height);
 }

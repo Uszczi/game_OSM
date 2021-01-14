@@ -13,8 +13,9 @@
 
 class Pacman;
 
-class PacmanGraphic : GraphicObject {
+class PacmanGraphic : public GraphicObject {
 	const Pacman *pacman;
+	int width, height;
 
 	PPMPixmap p_right;
 	PPMPixmap p_left;
@@ -29,6 +30,7 @@ public:
 	}
 
 	virtual void drawTo(PaintDevice &paintDevice) const override;
+	virtual Rect boundingRect() const override;
 };
 
 #endif /* GUI_PACMANGRAPHIC_H_ */

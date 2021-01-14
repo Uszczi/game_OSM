@@ -13,7 +13,11 @@ Game::Game() :
 	pacman(maze.start()),
 	pacmanGraphic(&pacman)
 {
+	for(const auto& pos : maze.getNodePoints())
+		points.push_back(ScorePoint(pos.first, pos.second));
 
+	for(const auto& pos : maze.getAdditionalPoints())
+		points.push_back(ScorePoint(pos.first, pos.second));
 }
 
 void Game::processInput(int input)
@@ -27,6 +31,18 @@ void Game::processInput(int input)
 void Game::update(double dt)
 {
 	pacman.update();
+
+	auto iter = points.begin();
+	while(iter != points.end())
+	{
+		if (pacmanGraphic.collidesWith(*iter)) {
+			iter = points.erase(iter);
+			gameStatus.addPoints(1);
+		}
+		else {
+			++iter;
+		}
+	}
 }
 
 void Game::drawTo(PaintDevice &paintDevice) const
@@ -35,6 +51,9 @@ void Game::drawTo(PaintDevice &paintDevice) const
 
 	if(isInDebugMode)
 		drawDebug(paintDevice);
+
+	for(const auto& scorePoint : points)
+		scorePoint.drawTo(paintDevice);
 
 	pacmanGraphic.drawTo(paintDevice);
 

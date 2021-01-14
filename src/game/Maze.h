@@ -9,6 +9,7 @@
 #define MAZE_H_
 
 #include <vector>
+#include <utility>
 
 class Node;
 
@@ -21,6 +22,9 @@ public:
 	virtual ~Maze();
 
 	Node* start() const;
+
+	const std::vector<std::pair<int, int>> &getAdditionalPoints() const;
+	const std::vector<std::pair<int, int>> &getNodePoints() const;
 };
 
 #endif /* MAZE_H_ */
