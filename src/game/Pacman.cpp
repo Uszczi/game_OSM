@@ -57,12 +57,12 @@ void Pacman::update()
 		x += dx;
 		y += dy;
 	}
-	else
+	else if(isInTunnel())
 	{
 		teleportIfNeeded();
 
-		if(isInTunnel())
-			x += dx;
+		x += dx;
+		dy = 0;
 	}
 }
 
@@ -114,22 +114,18 @@ bool Pacman::isInTunnel() const
 
 void Pacman::teleportIfNeeded()
 {
-	const int tunnelY = tunnelNodes.first->y;
-	if(y == tunnelY)
+	if(x < 115)
 	{
-		if(x <= 115)
-		{
-			x = 528;
-			dx = -dx;
+		x = 528;
+		dx = -dx;
 
-			now = tunnelNodes.second;
-		}
-		else if (x >= 528)
-		{
-			x = 115;
-			dx = -dx;
+		now = tunnelNodes.second;
+	}
+	else if (x > 528)
+	{
+		x = 115;
+		dx = -dx;
 
-			now = tunnelNodes.first;
-		}
+		now = tunnelNodes.first;
 	}
 }
