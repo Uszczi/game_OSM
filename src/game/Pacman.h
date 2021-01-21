@@ -21,8 +21,8 @@ enum class PacmanDirection {
 
 class Pacman {
 private:
-	std::pair<Node*, Node*> tunnelNodes;
 	Node *now;
+	std::pair<Node*, Node*> tunnelNodes;
 	int off_x = -9, off_y = -8;
 
 	int x, y;
@@ -45,6 +45,10 @@ public:
 
     std::pair<int, int> getPos() const;
     std::pair<int, int> getSpeed() const;
+
+private:
+    bool isInTunnel() const;
+    void teleportIfNeeded();
 };
 
 #endif /* PACMAN_H_ */

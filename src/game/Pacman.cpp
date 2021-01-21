@@ -57,23 +57,12 @@ void Pacman::update()
 		x += dx;
 		y += dy;
 	}
+	else
+	{
+		teleportIfNeeded();
 
-	else if(y == 220 && x == 115)
-	{
-		x = 528;
-		dx = -dx;
-		now = tunnelNodes.second;
-	}
-	else if (y == 220 && x == 528)
-	{
-		x = 115;
-		dx = -dx;
-		now = tunnelNodes.first;
-	}
-
-	else if((y == 220 && x <= 204) || (y == 220 && x >= 436))
-	{
-		x += dx;
+		if(isInTunnel())
+			x += dx;
 	}
 }
 
@@ -114,4 +103,33 @@ std::pair<int, int> Pacman::getPos() const
 std::pair<int, int> Pacman::getSpeed() const
 {
 	return std::make_pair(dx, dy);
+}
+
+bool Pacman::isInTunnel() const
+{
+	const int tunnelY = tunnelNodes.first->y;
+	return (y == tunnelY && x <= tunnelNodes.first->x) ||
+			(y == tunnelY && x >= tunnelNodes.second->x);
+}
+
+void Pacman::teleportIfNeeded()
+{
+	const int tunnelY = tunnelNodes.first->y;
+	if(y == tunnelY)
+	{
+		if(x <= 115)
+		{
+			x = 528;
+			dx = -dx;
+
+			now = tunnelNodes.second;
+		}
+		else if (x >= 528)
+		{
+			x = 115;
+			dx = -dx;
+
+			now = tunnelNodes.first;
+		}
+	}
 }
