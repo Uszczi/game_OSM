@@ -21,6 +21,7 @@ enum class PacmanDirection {
 
 class Pacman {
 private:
+	std::pair<Node*, Node*> tunnelNodes;
 	Node *now;
 	int off_x = -9, off_y = -8;
 
@@ -32,7 +33,7 @@ private:
     int direction;
     int next_direction;
 public:
-	Pacman(Node *startNode);
+	Pacman(Node *startNode, std::pair<Node*, Node*> tunnelNodes);
 	static PacmanDirection keyToDirection(int key);
 
 	Node *currentNode() const {

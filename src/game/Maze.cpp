@@ -66,8 +66,9 @@ Maze::Maze()
 {
 	nodes.reserve(nodePoints.size());
 
-	for(const auto& coord: nodePoints)
+	for(const auto& coord: nodePoints) {
 		nodes.push_back(new Node(coord.first, coord.second));
+	}
 
 	int index = 0;
 	for(const auto& neighbours : connections)
@@ -97,4 +98,9 @@ const std::vector<std::pair<int, int> >& Maze::getAdditionalPoints() const
 const std::vector<std::pair<int, int> >& Maze::getNodePoints() const
 {
 	return nodePoints;
+}
+
+std::pair<Node*, Node*> Maze::tunnelNodes() const
+{
+	return std::make_pair(nodes[13], nodes[45]);
 }

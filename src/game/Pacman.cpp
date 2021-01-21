@@ -25,8 +25,9 @@ PacmanDirection Pacman::keyToDirection(int key)
 	return PacmanDirection::NoMove;
 }
 
-Pacman::Pacman(Node *startNode) :
-	now(startNode)
+Pacman::Pacman(Node *startNode, std::pair<Node*, Node*> tunnelNodes) :
+	now(startNode),
+	tunnelNodes(tunnelNodes)
 {
 	x = startNode->x;
 	y = startNode->y;
@@ -55,6 +56,24 @@ void Pacman::update()
 	{
 		x += dx;
 		y += dy;
+	}
+
+	else if(y == 220 && x == 115)
+	{
+		x = 528;
+		dx = -dx;
+		now = tunnelNodes.second;
+	}
+	else if (y == 220 && x == 528)
+	{
+		x = 115;
+		dx = -dx;
+		now = tunnelNodes.first;
+	}
+
+	else if((y == 220 && x <= 204) || (y == 220 && x >= 436))
+	{
+		x += dx;
 	}
 }
 
