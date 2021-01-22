@@ -52,6 +52,10 @@ public:
 		is_playing = playing;
 	}
 
+	int getPoints() const {
+		return gameStatus.getPoints();
+	}
+
 private:
 	void drawDebug(PaintDevice &paintDevice) const;
 };
