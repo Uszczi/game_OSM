@@ -91,5 +91,12 @@ int main(int argc, char *argv[])
 		}
 	}
 
+	if(game)
+	{
+		highscores.addEntry(game->getPoints());
+		highscores.save();
+		delete game;
+	}
+
 	return 0;
 }
