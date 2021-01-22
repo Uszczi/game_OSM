@@ -51,6 +51,11 @@ void Pacman::update()
 		dx = next_dx;
 		dy = next_dy;
 	}
+	else if(isInTunnel())
+	{
+		dx = (next_dx != 0) ? next_dx : dx;
+		dy = 0;
+	}
 
 	if (now->check_move(dx, dy, x, y))
 	{
@@ -60,9 +65,7 @@ void Pacman::update()
 	else if(isInTunnel())
 	{
 		teleportIfNeeded();
-
 		x += dx;
-		dy = 0;
 	}
 }
 
