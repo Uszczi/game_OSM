@@ -7,8 +7,8 @@
 
 #include "GhostGraphic.h"
 
-GhostGraphic::GhostGraphic(Ghost * ghost) :
-	ghost_ppm(std::string("static/clyde.ppm"))
+GhostGraphic::GhostGraphic(Ghost * ghost, std::string ppm) :
+	ghost_ppm(std::string(ppm))
 {
 	this->ghost = ghost;
 }

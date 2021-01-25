@@ -9,11 +9,18 @@
 #include "../hardware/KeyMapping.h"
 
 Game::Game() :
-	mazePixmap(std::string("static/maze.ppm")),
-	pacman(maze.start(), maze.tunnelNodes()),
-	pacmanGraphic(&pacman),
-	clyde(maze.getNode(11)),
-	clydeGraphic(&clyde)
+mazePixmap(std::string("static/maze.ppm")),
+pacman(maze.start(), maze.tunnelNodes()),
+pacmanGraphic(&pacman),
+clyde(maze.getNode(11)),
+clydeGraphic(&clyde, "static/clyde.ppm"),
+clyde2(maze.getNode(32)),
+clydeGraphic2(&clyde2, "static/clyde.ppm"),
+clyde3(maze.getNode(1)),
+clydeGraphic3(&clyde3, "static/clyde.ppm"),
+clyde4(maze.getNode(48)),
+clydeGraphic4(&clyde4, "static/clyde.ppm")
+
 {
 	for(const auto& pos : maze.getNodePoints())
 		points.push_back(ScorePoint(pos.first, pos.second));
@@ -34,6 +41,9 @@ void Game::update(double dt)
 {
 	pacman.update();
 	clyde.update(pacman.x, pacman.y);
+	clyde2.update(pacman.x, pacman.y);
+	clyde3.update(pacman.x, pacman.y);
+	clyde4.update(pacman.x, pacman.y);
 
 	auto iter = points.begin();
 	while(iter != points.end())
@@ -60,6 +70,9 @@ void Game::drawTo(PaintDevice &paintDevice) const
 
 	pacmanGraphic.drawTo(paintDevice);
 	clydeGraphic.drawTo(paintDevice);
+	clydeGraphic2.drawTo(paintDevice);
+	clydeGraphic3.drawTo(paintDevice);
+	clydeGraphic4.drawTo(paintDevice);
 
 	paintDevice.drawText("HP: " + std::to_string(gameStatus.getLifeCount()), 0, paintDevice.getHeight() - 50);
 	paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);

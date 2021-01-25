@@ -16,7 +16,7 @@ public:
 	Ghost * ghost;
 	PPMPixmap ghost_ppm;
 
-	GhostGraphic(Ghost *);
+	GhostGraphic(Ghost *, std::string);
 	virtual ~GhostGraphic();
 
 	virtual void drawTo(PaintDevice &paintDevice) const override;

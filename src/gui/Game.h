@@ -36,6 +36,16 @@ class Game
 	Ghost clyde;
 	GhostGraphic clydeGraphic;
 
+	Ghost clyde2;
+	GhostGraphic clydeGraphic2;
+
+	Ghost clyde3;
+	GhostGraphic clydeGraphic3;
+
+
+	Ghost clyde4;
+	GhostGraphic clydeGraphic4;
+
 	std::list<ScorePoint> points;
 
 	bool isInDebugMode = false;
