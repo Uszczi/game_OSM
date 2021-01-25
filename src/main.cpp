@@ -14,8 +14,10 @@
 #include "gui/game.h"
 
 #include "misc/DataInfo.h"
+#include "misc/FpsStabilizer.h"
 
 #include <chrono>
+#include <iostream>
 
 static const char* HIGH_SCORE_FILE = "highscore.txt";
 
@@ -24,7 +26,8 @@ int main(int argc, char *argv[])
 	bool shouldExit = false;
 	bool showDebug = false;
 
-	DataInfo fpsInfo(128);
+	DataInfo fpsInfo(64);
+	FpsStabilizer stabilizer;
 
 	PaintDevice paintDevice("static/font.ppm");
 	InputDevice input;
@@ -68,7 +71,6 @@ int main(int argc, char *argv[])
 		}
 
 		const double dt_s = dt_us.count()/1000000.0;
-		fpsInfo.add(1.0/dt_s);
 
 		if(game->isPlaying())
 			game->update(dt_s);
@@ -82,6 +84,18 @@ int main(int argc, char *argv[])
 
 		paintDevice.swapBuffers();
 		paintDevice.clear();
+
+		fpsInfo.add(1.0/dt_s);
+		if(showDebug) {
+			stabilizer.applyDelay(60.0f, 1.0f/dt_s);
+		}
+	}
+
+	if(game)
+	{
+		highscores.addEntry(game->getPoints());
+		highscores.save();
+		delete game;
 	}
 
 	return 0;

@@ -10,7 +10,7 @@
 
 Game::Game() :
 	mazePixmap(std::string("static/maze.ppm")),
-	pacman(maze.start()),
+	pacman(maze.start(), maze.tunnelNodes()),
 	pacmanGraphic(&pacman),
 	clyde(maze.getNode(11)),
 	clydeGraphic(&clyde)
