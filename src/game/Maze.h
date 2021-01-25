@@ -22,6 +22,7 @@ public:
 	virtual ~Maze();
 
 	Node* start() const;
+	Node* getNode(int) const;
 
 	const std::vector<std::pair<int, int>> &getAdditionalPoints() const;
 	const std::vector<std::pair<int, int>> &getNodePoints() const;

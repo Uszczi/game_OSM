@@ -11,7 +11,9 @@
 Game::Game() :
 	mazePixmap(std::string("static/maze.ppm")),
 	pacman(maze.start()),
-	pacmanGraphic(&pacman)
+	pacmanGraphic(&pacman),
+	clyde(maze.getNode(11)),
+	clydeGraphic(&clyde)
 {
 	for(const auto& pos : maze.getNodePoints())
 		points.push_back(ScorePoint(pos.first, pos.second));
@@ -31,6 +33,7 @@ void Game::processInput(int input)
 void Game::update(double dt)
 {
 	pacman.update();
+	clyde.update(pacman.x, pacman.y);
 
 	auto iter = points.begin();
 	while(iter != points.end())
@@ -56,6 +59,7 @@ void Game::drawTo(PaintDevice &paintDevice) const
 		scorePoint.drawTo(paintDevice);
 
 	pacmanGraphic.drawTo(paintDevice);
+	clydeGraphic.drawTo(paintDevice);
 
 	paintDevice.drawText("HP: " + std::to_string(gameStatus.getLifeCount()), 0, paintDevice.getHeight() - 50);
 	paintDevice.drawText("Score: " + std::to_string(gameStatus.getPoints()), 0, paintDevice.getHeight() - 25);

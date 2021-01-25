@@ -24,7 +24,6 @@ private:
 	Node *now;
 	int off_x = -9, off_y = -8;
 
-	int x, y;
     int dx, dy;
     int next_dx;
     int	next_dy;
@@ -32,6 +31,7 @@ private:
     int direction;
     int next_direction;
 public:
+	int x, y;
 	Pacman(Node *startNode);
 	static PacmanDirection keyToDirection(int key);
 
