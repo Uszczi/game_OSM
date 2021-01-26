@@ -18,13 +18,13 @@ GhostGraphic::~GhostGraphic() {
 }
 
 void GhostGraphic::drawTo(PaintDevice &paintDevice) const {
-//	const auto pos = pacman->getPos();
-//	const auto v = pacman->getSpeed();
-
-	paintDevice.drawPixmap(ghost_ppm, ghost->x, ghost->y);
+	const auto pos = ghost->getPos();
+	paintDevice.drawPixmap(ghost_ppm, pos.first, pos.second);
 }
 
 Rect GhostGraphic::boundingRect() const {
-//	auto pos = ghost->getPos();
-	return Rect(ghost->x, ghost->y, ghost_ppm.getWidth(), ghost_ppm.getHeight());
+	return Rect(ghost->x + ghost->off_x,
+			ghost->y + ghost->off_y,
+			ghost_ppm.getWidth(),
+			ghost_ppm.getHeight());
 }

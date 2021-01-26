@@ -9,16 +9,19 @@
 #define GAME_GHOST_H_
 #include "Node.h"
 #include <stdlib.h>
+#include <utility>
 
 class Ghost {
 public:
 	float x, y, dx, dy;
+	int off_x = -6, off_y = -8;
 	Node *now;
 	Node *next = nullptr;
 	Node *prev = nullptr;
 	Ghost(Node*);
 	virtual ~Ghost();
 	void update(int x, int y);
+    std::pair<int, int> getPos() const;
 };
 
 #endif /* GAME_GHOST_H_ */
