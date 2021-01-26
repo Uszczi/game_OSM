@@ -47,7 +47,7 @@ void Game::update(double dt)
 
 	for(auto& ghostGraphic: ghostsGraphics)
 	{
-		if(ghostGraphic.collidesWith(pacmanGraphic)) {
+		if(pacmanGraphic.collidesWith(ghostGraphic)) {
 			gameStatus.takeLife();
 			pacman.teleport(maze.tunnelNodes().first, 115);
 		}
