@@ -132,3 +132,14 @@ void Pacman::teleportIfNeeded()
 		now = tunnelNodes.first;
 	}
 }
+
+void Pacman::teleport(Node* node, int newX, int newY)
+{
+	dx = dy = 0;
+	next_dx = next_dy = 0;
+
+	x = newX > 0 ? newX : node->x;
+	y = newY > 0 ? newY : node->y;
+
+	now = node;
+}

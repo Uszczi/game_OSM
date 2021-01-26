@@ -26,6 +26,5 @@ void GhostGraphic::drawTo(PaintDevice &paintDevice) const {
 
 Rect GhostGraphic::boundingRect() const {
 //	auto pos = ghost->getPos();
-	return Rect(10, 10, 10, 10);
-
+	return Rect(ghost->x, ghost->y, ghost_ppm.getWidth(), ghost_ppm.getHeight());
 }

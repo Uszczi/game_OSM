@@ -73,7 +73,18 @@ int main(int argc, char *argv[])
 		const double dt_s = dt_us.count()/1000000.0;
 
 		if(game->isPlaying())
+		{
 			game->update(dt_s);
+
+			if(game->isGameLost())
+			{
+				game->setPlaying(false);
+				highscores.addEntry(game->getPoints());
+
+				delete game;
+				game = new Game;
+			}
+		}
 
 		game->drawTo(paintDevice);
 
@@ -86,9 +97,7 @@ int main(int argc, char *argv[])
 		paintDevice.clear();
 
 		fpsInfo.add(1.0/dt_s);
-		if(showDebug) {
-			stabilizer.applyDelay(120.0f, 1.0f/dt_s);
-		}
+		stabilizer.applyDelay(120.0f, 1.0f/dt_s);
 	}
 
 	if(game)

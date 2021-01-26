@@ -47,6 +47,8 @@ public:
     std::pair<int, int> getPos() const;
     std::pair<int, int> getSpeed() const;
 
+    void teleport(Node* node, int newX = 0, int newY = 0);
+
 private:
     bool isInTunnel() const;
     void teleportIfNeeded();

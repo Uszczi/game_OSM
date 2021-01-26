@@ -33,18 +33,8 @@ class Game
 	Pacman pacman;
 	PacmanGraphic pacmanGraphic;
 
-	Ghost clyde;
-	GhostGraphic clydeGraphic;
-
-	Ghost clyde2;
-	GhostGraphic clydeGraphic2;
-
-	Ghost clyde3;
-	GhostGraphic clydeGraphic3;
-
-
-	Ghost clyde4;
-	GhostGraphic clydeGraphic4;
+	std::list<Ghost> ghosts;
+	std::list<GhostGraphic> ghostsGraphics;
 
 	std::list<ScorePoint> points;
 
@@ -72,6 +62,10 @@ public:
 
 	int getPoints() const {
 		return gameStatus.getPoints();
+	}
+
+	bool isGameLost() {
+		return gameStatus.getLifeCount() == 0;
 	}
 
 private:
