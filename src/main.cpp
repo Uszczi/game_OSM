@@ -97,7 +97,9 @@ int main(int argc, char *argv[])
 		paintDevice.clear();
 
 		fpsInfo.add(1.0/dt_s);
-		stabilizer.applyDelay(120.0f, 1.0f/dt_s);
+		if(!showDebug) {
+			stabilizer.applyDelay(120.0f, 1.0f/dt_s);
+		}
 	}
 
 	if(game)
