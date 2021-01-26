@@ -13,8 +13,12 @@
 
 #include "../game/Maze.h"
 #include "../game/Pacman.h"
+#include "../game/Ghost.h"
 
 #include "PacmanGraphic.h"
+#include "GhostGraphic.h"
+
+
 #include "ScorePoint.h"
 
 #include <list>
@@ -28,6 +32,20 @@ class Game
 
 	Pacman pacman;
 	PacmanGraphic pacmanGraphic;
+
+	Ghost clyde;
+	GhostGraphic clydeGraphic;
+
+	Ghost clyde2;
+	GhostGraphic clydeGraphic2;
+
+	Ghost clyde3;
+	GhostGraphic clydeGraphic3;
+
+
+	Ghost clyde4;
+	GhostGraphic clydeGraphic4;
+
 	std::list<ScorePoint> points;
 
 	bool isInDebugMode = false;

@@ -100,6 +100,11 @@ const std::vector<std::pair<int, int> >& Maze::getNodePoints() const
 	return nodePoints;
 }
 
+Node* Maze::getNode(int i) const
+{
+	return nodes[i];
+}
+
 std::pair<Node*, Node*> Maze::tunnelNodes() const
 {
 	return std::make_pair(nodes[13], nodes[45]);
