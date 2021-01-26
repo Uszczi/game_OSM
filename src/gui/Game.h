@@ -42,7 +42,7 @@ class Game
 	bool is_playing = false;
 
 public:
-	Game();
+	Game(int score = 0);
 
 	void processInput(int input);
 	void update(double dt);
@@ -64,8 +64,12 @@ public:
 		return gameStatus.getPoints();
 	}
 
-	bool isGameLost() {
+	bool isGameLost() const {
 		return gameStatus.getLifeCount() == 0;
+	}
+
+	bool isGameWon() const {
+		return points.size() == 0;
 	}
 
 private:

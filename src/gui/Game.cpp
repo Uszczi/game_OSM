@@ -12,11 +12,13 @@ static const std::vector<int> ghostNodes = {
 		11, 32, 1, 48
 };
 
-Game::Game() :
+Game::Game(int score) :
 	mazePixmap(std::string("static/maze.ppm")),
 	pacman(maze.start(), maze.tunnelNodes()),
 	pacmanGraphic(&pacman)
 {
+	gameStatus.addPoints(score);
+
 	for(const auto& node : ghostNodes) {
 		ghosts.emplace_back(maze.getNode(node));
 		ghostsGraphics.emplace_back(&ghosts.back(), "static/clyde.ppm");
@@ -39,7 +41,10 @@ void Game::processInput(int input)
 
 void Game::update(double dt)
 {
-	pacman.update();
+	if(!(gameStatus.getPoints() % 10) && gameStatus.getPoints() > 9) {
+		pacman.setBoost(4);
+	}
+	pacman.update(dt);
 
 	for(auto& ghost: ghosts) {
 		ghost.update(pacman.x, pacman.y);
@@ -64,6 +69,7 @@ void Game::update(double dt)
 			++iter;
 		}
 	}
+
 }
 
 void Game::drawTo(PaintDevice &paintDevice) const

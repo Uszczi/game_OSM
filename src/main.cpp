@@ -84,6 +84,13 @@ int main(int argc, char *argv[])
 				delete game;
 				game = new Game;
 			}
+			else if (game->isGameWon())
+			{
+				int score = game->getPoints();
+
+				delete game;
+				game = new Game(score);
+			}
 		}
 
 		game->drawTo(paintDevice);
@@ -98,7 +105,7 @@ int main(int argc, char *argv[])
 
 		fpsInfo.add(1.0/dt_s);
 		if(!showDebug) {
-			stabilizer.applyDelay(120.0f, 1.0f/dt_s);
+			stabilizer.applyDelay(60.0f, 1.0f/dt_s);
 		}
 	}
 
