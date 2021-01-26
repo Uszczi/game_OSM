@@ -28,7 +28,6 @@ Ghost::~Ghost() {
 void Ghost::update(int x, int y)
 {
 	if (next == now->change_now(this->x, this->y)){
-//		now = now->change_now(this->x, this->y);
 
 		while(true){
 		int nextN = rand() % next->neigbours_len;
@@ -58,4 +57,9 @@ void Ghost::update(int x, int y)
 		this->x += dx;
 		this->y += dy;
 	}
+}
+
+std::pair<int, int> Ghost::getPos() const
+{
+	return std::make_pair(x + off_x, y + off_y);
 }
