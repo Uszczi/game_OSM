@@ -42,7 +42,7 @@ void Game::processInput(int input)
 void Game::update(double dt)
 {
 	if(!(gameStatus.getPoints() % 10) && gameStatus.getPoints() > 9) {
-		pacman.setBoost(4);
+		pacman.setBoost(3);
 	}
 	pacman.update(dt);
 
