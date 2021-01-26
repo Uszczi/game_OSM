@@ -31,6 +31,8 @@ private:
 
     int direction;
     int next_direction;
+    double boostTime = 0;
+
 public:
 	int x, y;
 	Pacman(Node *startNode);
@@ -41,13 +43,17 @@ public:
 		return now;
 	}
 
-	void update();
+	void update(double dt);
     void setDirection(PacmanDirection direction);
 
     std::pair<int, int> getPos() const;
     std::pair<int, int> getSpeed() const;
 
     void teleport(Node* node, int newX = 0, int newY = 0);
+
+    void setBoost(double time) {
+    	boostTime = time;
+    }
 
 private:
     bool isInTunnel() const;

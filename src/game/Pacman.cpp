@@ -42,30 +42,35 @@ Pacman::Pacman(Node *startNode, std::pair<Node*, Node*> tunnelNodes) :
 	next_direction = 0;
 }
 
-void Pacman::update()
+void Pacman::update(double dt)
 {
-	now = now->change_now(x, y);
+	int iter = boostTime <= 1 ? 1 : boostTime;
+	boostTime -= dt;
 
-	if (now->check_move(next_dx, next_dy, x, y))
-	{
-		dx = next_dx;
-		dy = next_dy;
-	}
-	else if(isInTunnel())
-	{
-		dx = (next_dx != 0) ? next_dx : dx;
-		dy = 0;
-	}
+	for(int i = 0; i < iter; ++i) {
+		now = now->change_now(x, y);
 
-	if (now->check_move(dx, dy, x, y))
-	{
-		x += dx;
-		y += dy;
-	}
-	else if(isInTunnel())
-	{
-		teleportIfNeeded();
-		x += dx;
+		if (now->check_move(next_dx, next_dy, x, y))
+		{
+			dx = next_dx;
+			dy = next_dy;
+		}
+		else if(isInTunnel())
+		{
+			dx = (next_dx != 0) ? next_dx : dx;
+			dy = 0;
+		}
+
+		if (now->check_move(dx, dy, x, y))
+		{
+			x += dx;
+			y += dy;
+		}
+		else if(isInTunnel())
+		{
+			teleportIfNeeded();
+			x += dx;
+		}
 	}
 }
 
