@@ -12,6 +12,10 @@
 #include <utility>
 
 class Ghost {
+private:
+	void move();
+	bool setToPac(int, int, int);
+	int step=0;
 public:
 	float x, y, dx, dy;
 	int off_x = -6, off_y = -8;
