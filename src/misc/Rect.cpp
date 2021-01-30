@@ -23,5 +23,5 @@ bool Rect::intersects(const Rect &other) const
 
 bool Rect::contains(int Px, int Py) const
 {
-	return (Px > x && Px < x + width) && (Py > y && Py < y + height);
+	return (Px >= x && Px <= x + width) && (Py >= y && Py <= y + height);
 }
