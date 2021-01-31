@@ -9,49 +9,26 @@
 #define PAINTDEVICE_H_
 
 #include "../gui/PPMPixmap.h"
-
-#include <linux/fb.h>
 #include <string>
 
 constexpr unsigned CHAR_SIZE_X = 10;
 constexpr unsigned CHAR_SIZE_Y = 22;
 
 class PaintDevice {
-private:
-	void *framebuffer;
-	unsigned int* buffer;
-	PPMPixmap fontPixmap;
-
-	int frameBufferFD;
-	struct fb_fix_screeninfo fix_info;
-	unsigned width, height;
-
 public:
-	PaintDevice(const std::string &fontFile);
-	virtual ~PaintDevice();
+    virtual ~PaintDevice() = default;
 
-	unsigned getWidth() const {
-		return width;
-	}
+    virtual unsigned getWidth() const = 0;
+    virtual unsigned getHeight() const = 0;
 
-	unsigned getHeight() const {
-		return height;
-	}
+    virtual void drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y) = 0;
+    virtual void drawText(const std::string &text, unsigned x, unsigned y) = 0;
+    virtual void drawRect(unsigned x, unsigned y, unsigned width, unsigned height, unsigned color) = 0;
 
-	void drawPixmap(const PPMPixmap &pixmap, unsigned x, unsigned y);
-	void drawText(const std::string &text, unsigned x, unsigned y);
-	void drawRect(unsigned x, unsigned y, unsigned width, unsigned height, unsigned color);
+    virtual void setPixel(unsigned x, unsigned y, unsigned color) = 0;
 
-	void setPixel(unsigned x, unsigned y, unsigned color);
-
-	void clear();
-	void swapBuffers();
-
-private:
-	void drawChar(char chr, unsigned x, unsigned y);
-	uint8_t *pixelAt(unsigned x, unsigned y) const;
-
-	bool isInBounds(unsigned x, unsigned y) const;
+    virtual void clear() = 0;
+    virtual void swapBuffers() = 0;
 };
 
 #endif /* PAINTDEVICE_H_ */

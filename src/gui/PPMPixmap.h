@@ -44,7 +44,7 @@ public:
 	PPMPixmap& operator=(PPMPixmap &&other);
 
 private:
-	bool hasHeader(std::ifstream &file) const;
+    bool hasHeader(std::ifstream &file) const;
 	void convertAndStore(uint8_t *raw);
 };
 

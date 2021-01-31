@@ -7,13 +7,14 @@
 
 #include "PacmanGraphic.h"
 #include "../game/Pacman.h"
+#include "../hardware/Resources.h"
 
 PacmanGraphic::PacmanGraphic(const Pacman *pacman) :
 	pacman(pacman),
-	p_right(std::string("static/pacman_right.ppm")),
-	p_left(std::string("static/pacman_left.ppm")),
-	p_up(std::string("static/pacman_up.ppm")),
-	p_down(std::string("static/pacman_down.ppm"))
+    p_right(res::resource(PACMAN_RIGHT)),
+    p_left(res::resource(PACMAN_LEFT)),
+    p_up(res::resource(PACMAN_UP)),
+    p_down(res::resource(PACMAN_DOWN))
 {
 	width = p_right.getWidth();
 	height = p_right.getHeight();

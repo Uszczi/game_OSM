@@ -17,25 +17,25 @@ PPMPixmap::PPMPixmap(const std::string &filename) :
 	width(640),
 	height(480)
 {
-	std::ifstream ppmFile(filename, std::ios::in | std::ios::binary);
+    std::ifstream ppmFile(filename, std::ios::in | std::ios::binary);
 
-	if(hasHeader(ppmFile))
-	{
-		std::string header;
-		do {
-			std::getline(ppmFile, header);			// Skip comments
-		} while(header[0] == '#');
+    if(hasHeader(ppmFile))
+    {
+        std::string header;
+        do {
+            std::getline(ppmFile, header);			// Skip comments
+        } while(header[0] == '#');
 
-		std::stringstream pixmapSize(header);		// Read size
-		pixmapSize >> width;
-		pixmapSize >> height;
+        std::stringstream pixmapSize(header);		// Read size
+        pixmapSize >> width;
+        pixmapSize >> height;
 
-		std::getline(ppmFile, header);				// Skip max color value
+        std::getline(ppmFile, header);				// Skip max color value
 	}
 	else
-	{
-		ppmFile.clear();
-		ppmFile.seekg(0);
+    {
+        ppmFile.clear();
+        ppmFile.seekg(0);
 	}
 
 	data = new uint8_t[width*height*4];
@@ -50,8 +50,8 @@ PPMPixmap::PPMPixmap(const std::string &filename) :
 
 bool PPMPixmap::hasHeader(std::ifstream &file) const
 {
-	std::string header;
-	std::getline(file, header);
+    std::string header;
+    std::getline(file, header);
 
 	if(header == "P6")
 		return true;

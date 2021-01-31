@@ -8,15 +8,17 @@
 #ifndef KEYMAPPING_H_
 #define KEYMAPPING_H_
 
+#include <QKeyEvent>
+
 enum KeyMapping
 {
-	KEY_ESC = 1,
-	KEY_ENTER = 28,
-	KEY_SPACE = 57,
-	ARROW_UP = 103,
-	ARROW_LEFT = 105,
-	ARROW_RIGHT = 106,
-	ARROW_DOWN = 108
+    KEY_ESC = Qt::Key_Escape,
+    KEY_ENTER = Qt::Key_Return,
+    KEY_SPACE = Qt::Key_Space,
+    ARROW_LEFT = Qt::Key_Left,
+    ARROW_UP = Qt::Key_Up,
+    ARROW_RIGHT = Qt::Key_Right,
+    ARROW_DOWN = Qt::Key_Down
 };
 
 #endif /* KEYMAPPING_H_ */

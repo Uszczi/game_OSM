@@ -7,13 +7,14 @@
 
 #include "Game.h"
 #include "../hardware/KeyMapping.h"
+#include "../hardware/Resources.h"
 
 static const std::vector<int> ghostNodes = {
 		11, 32, 1, 48
 };
 
 Game::Game(int score) :
-	mazePixmap(std::string("static/maze.ppm")),
+    mazePixmap(res::resource(MAZE_PIXMAP)),
 	pacman(maze.start(), maze.tunnelNodes()),
 	pacmanGraphic(&pacman)
 {
@@ -21,7 +22,7 @@ Game::Game(int score) :
 
 	for(const auto& node : ghostNodes) {
 		ghosts.emplace_back(maze.getNode(node));
-		ghostsGraphics.emplace_back(&ghosts.back(), "static/clyde.ppm");
+        ghostsGraphics.emplace_back(&ghosts.back(), res::resource(CLYDE_PIXMAP));
 	}
 
 	for(const auto& pos : maze.getNodePoints())
